@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_infos:
-    speed: 8
+    speed: 12
     damages: 0.2
     direction: {x: 0, y: 0, z: 0}
     destroyer: 4
