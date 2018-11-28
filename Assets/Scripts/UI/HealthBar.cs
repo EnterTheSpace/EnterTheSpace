@@ -6,38 +6,20 @@ using UnityEngine.UI;
 public class HealthBar : MonoBehaviour
 {
 
-	public float mFlt_health {set; get;}
-	[SerializeField] public float mFlt_lerpSpeed;//Percent per second
+    public float health {set; get;}
+    private Slider healthBar;
 
-	private bool mB_lerping;
-	private Slider mRef_healthBar;
+    private void Start()
+    {
+        healthBar = this.GetComponent<Slider>();
+        health = 1f;
+    }
 
-	private void Start()
-	{
-		mRef_healthBar = this.GetComponent<Slider>();
-		mFlt_health = 1f;
-	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-		mFlt_health = Mathf.Clamp(mFlt_health, 0f, 1f);
-		
-		if(mB_lerping)
-		{
-			if(mRef_healthBar.value > mFlt_health)
-			{
-				mRef_healthBar.value -= mFlt_lerpSpeed * Time.deltaTime;
-			}else if(mRef_healthBar.value < mFlt_health)
-			{
-				mRef_healthBar.value += mFlt_lerpSpeed * Time.deltaTime;
-			}else
-				mB_lerping = false;
-			mRef_healthBar.value = mRef_healthBar.value;
-		}else
-		{
-			if(mFlt_health != mRef_healthBar.value)
-				mB_lerping = true;
-		}
-	}
+    // Update is called once per frame
+    void Update ()
+    {
+        healthBar.value = health;
+        if(health < 0f)
+            health = 0f;
+    }
 }
