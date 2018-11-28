@@ -6,11 +6,12 @@ using System.Collections;
 [CustomPropertyDrawer(typeof(HideAttribute))]
 public class HidePropertyDrawer : PropertyDrawer
 {
+
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         HideAttribute condHAtt = (HideAttribute)attribute;
         bool enabled = GetHideAttributeResult(condHAtt, property);
- 
+        
         bool wasEnabled = GUI.enabled;
         GUI.enabled = enabled;
         if (!condHAtt.HideInInspector || enabled)
@@ -21,11 +22,11 @@ public class HidePropertyDrawer : PropertyDrawer
         GUI.enabled = wasEnabled;
     }
  
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         HideAttribute condHAtt = (HideAttribute)attribute;
         bool enabled = GetHideAttributeResult(condHAtt, property);
- 
+
         if (!condHAtt.HideInInspector || enabled)
         {
             return EditorGUI.GetPropertyHeight(property, label);
@@ -39,10 +40,11 @@ public class HidePropertyDrawer : PropertyDrawer
     private bool GetHideAttributeResult(HideAttribute condHAtt, SerializedProperty property)
     {
         bool enabled = true;
-        string propertyPath = property.propertyPath; //returns the property path of the property we want to apply the attribute to
-        string conditionPath = propertyPath.Replace(property.name, condHAtt.ConditionalSourceField); //changes the path to the conditionalsource property path
-        SerializedProperty sourcePropertyValue = property.serializedObject.FindProperty(conditionPath);
- 
+        SerializedProperty sourcePropertyValue = null;
+        string propertyPath = property.propertyPath; //récupère les noms des variables Serialized
+        string conditionPath = propertyPath.Replace(property.name, condHAtt.ConditionalSourceField); //Récupère juste les noms des variables à cacher
+        sourcePropertyValue = property.serializedObject.FindProperty(conditionPath); //transforme en SerializedProperty
+
         if (sourcePropertyValue != null)
         {
             enabled = sourcePropertyValue.boolValue;
@@ -51,7 +53,7 @@ public class HidePropertyDrawer : PropertyDrawer
         {
             Debug.LogWarning("Attempting to use a ConditionalHideAttribute but no matching SourcePropertyValue found in object: " + condHAtt.ConditionalSourceField);
         }
- 
         return enabled;
     }
+
 }
