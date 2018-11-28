@@ -7,7 +7,7 @@ public class Following : MonoBehaviour {
 
 	[Header("Radius"),LabelOverride("Has radius ?")]
 	public bool hasRadius = true;
-	[Range(.1f,20f), Hide("hasRadius",true)]
+	[Hide("hasRadius",true)]
 	public float rangeRadius = 5f;
 	[SerializeField, LabelOverride("Stopping distance"),Hide("hasRadius")]
 	[Tooltip("Distance at which ennemy stops from object.")]

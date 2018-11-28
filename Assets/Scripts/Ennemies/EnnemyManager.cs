@@ -18,10 +18,6 @@ public class EnnemyManager : Pawn {
 	[Header("Path"),LabelOverride("Update delay"),SerializeField]
 	[Tooltip("Delay in second for updating the path.")]
 	private float updatePathDelay = 1f;
-
-	[Header("Escape"), LabelOverride("Can escape ?"), SerializeField]
-	[Tooltip("If ennemy can escape from object.")]
-	private bool isEscaping = false;
 	
 	
 	//Privates
@@ -30,6 +26,8 @@ public class EnnemyManager : Pawn {
 	private FieldOfView fow;
 	private Escaping escape;
 	private Following follow;
+	private Transform visibleTargets;
+	private Transform lastVisibleTarget;
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +37,7 @@ public class EnnemyManager : Pawn {
 		fow = GetComponent<FieldOfView>();
 		escape = GetComponent<Escaping>();
 		follow = GetComponent<Following>();
+		visibleTargets = null;
 	}
 	
 	// Update is called once per frame
@@ -58,14 +57,29 @@ public class EnnemyManager : Pawn {
 				follow.isFollowingPlayer = false;
 				print("Path cleared");
 			}
-			
 		}
 	}
 
 	void FixedUpdate(){
-		if(follow.isOverlapping)
-			fow.FindVisibleTargets();
-		if(isEscaping)
-			escape.Escape(player,nav);
+		bool canEscape = true;
+		if(escape.isEscaping){
+			if(canEscape)
+				escape.Escape(player,nav);
+			
+			if(follow.isOverlapping){
+				visibleTargets = fow.FindVisibleTargets();
+				if(visibleTargets!=null){
+					lastVisibleTarget = visibleTargets;
+				}
+				else{
+					if(lastVisibleTarget!=null){
+						nav.SetDestination(lastVisibleTarget.position);
+						canEscape = false;
+					}
+				}
+			}
+		}
+			
+		
 	}
 }

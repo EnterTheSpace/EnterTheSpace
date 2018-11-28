@@ -11,10 +11,10 @@ public class FieldOfView : MonoBehaviour {
 	private LayerMask obstacleMask;
 
 	[HideInInspector]
-	public List<Transform> visibleTargets = new List<Transform>();
+	public Transform visibleTarget;
 
-	public void FindVisibleTargets() {
-		visibleTargets.Clear ();
+	public Transform FindVisibleTargets() {
+		visibleTarget = null;
 		Collider2D[] targetsInViewRadius = Physics2D.OverlapCircleAll(transform.position, viewRadius, targetMask);
 
 		for (int i = 0; i < targetsInViewRadius.Length; i++) {
@@ -23,8 +23,10 @@ public class FieldOfView : MonoBehaviour {
 			float dstToTarget = Vector2.Distance (transform.position, target.position);
 
 			if (!Physics2D.Raycast(transform.position, dirToTarget, dstToTarget, obstacleMask)) {
-				visibleTargets.Add(target);
+				visibleTarget = target;
 			}
 		}
+
+		return visibleTarget;
 	}
 }

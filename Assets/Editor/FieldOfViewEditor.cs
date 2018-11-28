@@ -6,13 +6,14 @@ using UnityEditor;
 public class FieldOfViewEditor : Editor {
 	void OnSceneGUI() {
 		FieldOfView fow = (FieldOfView)target;
-		Handles.color = Color.white;
-		Handles.DrawWireDisc(fow.transform.position, fow.transform.forward, fow.viewRadius);
+		if(fow.GetComponent<Escaping>().isEscaping){
+			Handles.color = Color.white;
+			Handles.DrawWireDisc(fow.transform.position, fow.transform.forward, fow.viewRadius);
 
-		Handles.color = Color.red;
-		foreach (Transform visibleTarget in fow.visibleTargets) {
-			Handles.DrawLine(fow.transform.position, visibleTarget.position);
+			Handles.color = Color.red;
+			if(fow.visibleTarget!=null)
+				Handles.DrawLine(fow.transform.position, fow.visibleTarget.position);
 		}
+		
 	}
-
 }
