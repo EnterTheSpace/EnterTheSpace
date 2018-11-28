@@ -23,7 +23,6 @@ public class Player : Pawn
 	[Tooltip("Gun transform reference"), SerializeField] private Transform m_gunRef;
 	[Tooltip("Weapon script reference"), SerializeField] private Weapon m_weaponRef;
 
-	private Vector3 m_mousePos;
 	private MovementController mRef_mvmtController;
 	private AimController mRef_aimController;
 	private DashController mRef_dashController;
@@ -48,8 +47,6 @@ public class Player : Pawn
 				m_controller = ENUM_Input.Mouse;
 		}
 
-		m_mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - m_gunRef.position;
-
 		mRef_mvmtController = this.GetComponent<MovementController>();
 		mRef_mvmtController.Init(Vector3.zero, mFlt_speed, true);
 
@@ -63,7 +60,7 @@ public class Player : Pawn
 	public override void ApplyDamages(float damages)
 	{
 		base.ApplyDamages(damages);
-		if(mFlt_health == 0f)
+		if(health == 0f)
 		{
 			//Destroy(this.gameObject);//Death here
 

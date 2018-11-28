@@ -3,82 +3,73 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct sProjectileInfos
+public struct ProjectileInfos
 {
-	public float speed;
-	public float damages;
-	public Vector3 direction;
-	public float destroyer;
-	public bool bounce;
+    public float speed;
+    public float damages;
+    [HideInInspector] public Vector3 direction;
+    public float destroyer;
+    public bool bounce;
 }
 
+[RequireComponent(typeof(Collider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class Projectile : MonoBehaviour
 {
-	public sProjectileInfos m_infos;
-	
-	//TO DO : Implement this function when a projectile is instantiated, the fired projectiles of the Weapon class should be of type Projectile
-	public Projectile Constructor(Vector2 direction, float speed, float damages)
-	{
-		m_infos.direction = direction;
-		m_infos.speed = speed;
-		m_infos.damages = damages;
+    private ProjectileInfos infos;
+            //REFERENCES
+    protected Rigidbody2D rigidBody;
+    protected Collider2D cCollider;
 
-		return this;
-	}
+    private void Awake()
+    {
+        rigidBody = this.GetComponent<Rigidbody2D>();
+        cCollider = this.GetComponent<Collider2D>();
+    }
 
-	public void Destructor()
-	{
-		Destroy(this.gameObject);
-	}
+    public void Initialization(ProjectileInfos infos, Vector3 direction)
+    {
+        this.infos = infos;
 
-	//TO DO : Replace this function by the Constructor function
-	public void Initialize(Vector2 direction, float speed, float damages)
-	{
-		m_infos.direction = direction;
-		m_infos.speed = speed;
-		m_infos.damages = damages;
-		if(m_infos.bounce)
-			this.GetComponent<Collider2D>().isTrigger = false;
-		else
-			this.GetComponent<Collider2D>().isTrigger = true;
-	}
+        this.infos.direction = direction.normalized;
 
-	public void Initialize(Vector3 direction)
-	{
-		m_infos.direction = direction;
-		this.GetComponent<Rigidbody2D>().velocity = direction.normalized * m_infos.speed;
-		Invoke("Destructor", m_infos.destroyer);
-		if(m_infos.bounce)
-			this.GetComponent<Collider2D>().isTrigger = false;
-		else
-			this.GetComponent<Collider2D>().isTrigger = true;
-	}
+        if(this.infos.bounce)
+            this.cCollider.isTrigger = false;
+        else
+            this.cCollider.isTrigger = true;
+        this.rigidBody.velocity = this.infos.direction * this.infos.speed;
 
+        Invoke("Destructor", this.infos.destroyer);
+    }
 
-	
-	private void OnTriggerEnter2D(Collider2D other)
-	{
-		if(!other.CompareTag("Grid")){
-			if(other.gameObject.GetComponent<Pawn>() != null && !other.CompareTag("Parry"))
-			{
-				other.gameObject.GetComponent<Pawn>().ApplyDamages(m_infos.damages);
-				Destructor();
-			}else if(other.gameObject.GetComponent<Projectile>() == null)
-			{
-				Destructor();
-			}
-		}
-	}
+    public void Destructor()
+    {
+        Destroy(this.gameObject);
+    }
 
-	private void OnCollisionEnter2D(Collision2D other)
-	{
-		if(other.gameObject.GetComponent<Pawn>() != null)
-		{
-			other.gameObject.GetComponent<Pawn>().ApplyDamages(m_infos.damages);
-			Destructor();
-		}else if(other.gameObject.GetComponent<Projectile>() == null && !m_infos.bounce)
-		{
-			Destructor();
-		}
-	}
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(!other.CompareTag("Grid")){
+            if(other.gameObject.GetComponent<Pawn>() != null && !other.CompareTag("Parry"))
+            {
+                other.gameObject.GetComponent<Pawn>().ApplyDamages(this.infos.damages);
+                Destructor();
+            }else if(other.gameObject.GetComponent<Projectile>() == null)
+            {
+                Destructor();
+            }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if(other.gameObject.GetComponent<Pawn>() != null)
+        {
+            other.gameObject.GetComponent<Pawn>().ApplyDamages(this.infos.damages);
+            Destructor();
+        }else if(other.gameObject.GetComponent<Projectile>() == null && !this.infos.bounce)
+        {
+            Destructor();
+        }
+    }
 }
