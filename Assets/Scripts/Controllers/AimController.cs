@@ -11,7 +11,7 @@ public class AimController : MonoBehaviour
 {
 		//PROPERTIES
 	private ENUM_Input m_aimInfluence;//If different of None, mRef_targetTrans is useless.
-	[SerializeField] private Transform mRef_aimingTrans;
+	[SerializeField] public Transform mRef_aimingTrans;
 	[SerializeField] private Transform mRef_targetTrans;
 	private Vector3 mV_targetDirection;
 	
@@ -24,6 +24,7 @@ public class AimController : MonoBehaviour
 	private void Aiming()
 	{
 		float rotForce = 0f;
+		
 
 		switch(m_aimInfluence)
 		{

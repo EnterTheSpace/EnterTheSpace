@@ -15,46 +15,48 @@ public class Player : Pawn
 {
 	//Properties
 	[Header("Properties")]
-	[Tooltip("Player speed")][SerializeField] private float mFlt_speed;
-	[SerializeField]private ENUM_Input m_controller;
+	[Tooltip("Player speed"), SerializeField] private float speed;
+	[SerializeField] private ENUM_Input input;
+	private bool shootReset;
+
 	//References
 	[Header("References")]
-	[Tooltip("Aiming transform reference"), SerializeField] private Transform mRef_aiming;
-	[Tooltip("Gun transform reference"), SerializeField] private Transform m_gunRef;
-	[Tooltip("Weapon script reference"), SerializeField] private Weapon m_weaponRef;
+	[Tooltip("Aiming transform reference"), SerializeField] private Transform arm;
+	
+	private WeaponController weaponRef;
+	private MovementController mvmtController;
+	private AimController aimController;
+	private DashController dashController;
+	private ParryController parryController;
 
-	private MovementController mRef_mvmtController;
-	private AimController mRef_aimController;
-	private DashController mRef_dashController;
-	private ParryController mRef_parryController;
-
-
-	// Use this for initialization
 	void Start ()
 	{
-		//Cursor.lockState = CursorLockMode.Confined;
 		Initialization();
 	}
 
 	protected override void Initialization()
 	{
 		base.Initialization();
-		if(m_controller != ENUM_Input.None)
+		if(input != ENUM_Input.None)
 		{
 			if(Input.GetJoystickNames().Length > 0)
-				m_controller = ENUM_Input.Joystick;
+				input = ENUM_Input.Joystick;
 			else
-				m_controller = ENUM_Input.Mouse;
+				input = ENUM_Input.Mouse;
 		}
 
-		mRef_mvmtController = this.GetComponent<MovementController>();
-		mRef_mvmtController.Init(Vector3.zero, mFlt_speed, true);
+		shootReset = true;
 
-		mRef_aimController = this.GetComponent<AimController>();
-		mRef_aimController.Init(mRef_aiming, m_controller);
+		weaponRef = this.GetComponent<WeaponController>();
 
-		mRef_dashController = this.GetComponent<DashController>();
-		mRef_parryController = this.GetComponent<ParryController>();
+		mvmtController = this.GetComponent<MovementController>();
+		mvmtController.Init(Vector3.zero, speed, true);
+
+		aimController = this.GetComponent<AimController>();
+		aimController.Init(arm, input);
+
+		dashController = this.GetComponent<DashController>();
+		parryController = this.GetComponent<ParryController>();
 	}
 
 	public override void ApplyDamages(float damages)
@@ -78,24 +80,37 @@ public class Player : Pawn
 
 	private void Inputs()
 	{
-		Vector3 diff = mRef_aimController.GetTargetDirection().normalized;
+		Vector3 diff = aimController.GetTargetDirection();
 
 		//Sets the player body animator parameter to the greatest moving axis input (Mathf.Abs converts to the absolute value).
 		this.GetComponent<Animator>().SetFloat("Speed", (Mathf.Abs(Input.GetAxisRaw("Horizontal")) > Mathf.Abs(Input.GetAxisRaw("Vertical")) ? Mathf.Abs(Input.GetAxisRaw("Horizontal")) : Mathf.Abs(Input.GetAxisRaw("Vertical"))));
 
-		switch(m_controller)
+		switch(input)
 		{
 			case ENUM_Input.Joystick:
 				if(Input.GetAxis("Trigger") < -0.02f)
-					m_weaponRef.TryShot(diff);
+				{
+					weaponRef.TryShot(shootReset);
+					shootReset = false;
+				}
+				else
+					shootReset = true;
+
 				if(Input.GetAxis("Trigger") > 0.02f)
-					mRef_parryController.TryParry();
+					parryController.TryParry();
 			break;
 			case ENUM_Input.Mouse:
-				if(Input.GetButtonDown("Fire1"))
-					m_weaponRef.TryShot(diff);
+				if(Input.GetButton("Fire1"))
+				{
+					weaponRef.TryShot(shootReset);
+					shootReset = false;
+				}else
+				{
+					shootReset = true;
+				}
+
 				if(Input.GetButtonDown("Parry"))
-					mRef_parryController.TryParry();
+					parryController.TryParry();
 			break;
 			default:
 			break;
@@ -103,19 +118,19 @@ public class Player : Pawn
 
 		if(Input.GetButtonDown("Dash"))
 		{
-			if(mRef_dashController.TryDash(mRef_mvmtController.GetDirection()))
+			if(dashController.TryDash(mvmtController.GetDirection()))
 			{
 				this.GetComponent<Animator>().SetTrigger("Dash");
-				//this.GetComponent<Animator>().speed = 1/(mRef_dashController.GetDashRange()/mRef_dashController.GetDashSpeed());
+				//this.GetComponent<Animator>().speed = 1/(dashController.GetDashRange()/dashController.GetDashSpeed());
 			}
 		}
 
 		if(diff.x < 0f)//Player aiming left
 		{
-			if(!m_gunRef.GetChild(0).GetComponent<SpriteRenderer>().flipY)
+			if(!weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY)
 			{
-				m_gunRef.GetChild(0).GetComponent<SpriteRenderer>().flipY = true;
-				m_gunRef.GetChild(0).GetComponent<Weapon>().BarrelRef().localPosition -= new Vector3(0f, 0.06f, 0f);
+				weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY = true;
+				weaponRef.BarrelRef().localPosition -= new Vector3(0f, 0.06f, 0f);
 			}
 			this.GetComponent<SpriteRenderer>().flipX = true;//Flip the character body sprite
 			if(Input.GetAxis("Horizontal") > 0.0f)//If the player is moving in the opposite direction (to the right), the correct running animation is played.
@@ -127,10 +142,10 @@ public class Player : Pawn
 			}
 		}else if(diff.x > 0f)//Player aiming right
 		{
-			if(m_gunRef.GetChild(0).GetComponent<SpriteRenderer>().flipY)
+			if(weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY)
 			{
-				m_gunRef.GetChild(0).GetComponent<SpriteRenderer>().flipY = false;
-				m_gunRef.GetChild(0).GetComponent<Weapon>().BarrelRef().localPosition += new Vector3(0f, 0.06f, 0f);
+				weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY = false;
+				weaponRef.BarrelRef().localPosition += new Vector3(0f, 0.06f, 0f);
 			
 			}
 			this.GetComponent<SpriteRenderer>().flipX = false;//Restore the character body and the gun sprites orientation
@@ -144,8 +159,8 @@ public class Player : Pawn
 		}
 	}
 
-	private void ChangeWeapon(Weapon newWeapon)
+	private void ChangeWeapon(WeaponController newWeapon)
 	{
-		m_weaponRef = newWeapon;
+		weaponRef = newWeapon;
 	}
 }

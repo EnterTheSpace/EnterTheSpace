@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileSpawner : Weapon
+public class ProjectileSpawner : WeaponController
 {
 
 	protected override void Update()
 	{
 		base.Update();
-		TryShot(this.transform.up);
+		TryShot(true);
 	}
 }

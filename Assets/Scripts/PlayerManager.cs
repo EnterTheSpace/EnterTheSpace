@@ -12,7 +12,7 @@ public class PlayerManager : MonoBehaviour
 	//References
 	[Header("References")]
 	[Tooltip("Gun transform reference")][SerializeField] private Transform m_gunRef;
-	private Weapon m_weaponRef;
+	private WeaponController m_weaponRef;
 	private Transform m_bodyRef;
 	
 	private Vector3 m_mousePos;
@@ -87,12 +87,12 @@ public class PlayerManager : MonoBehaviour
 
 		if(Input.GetButtonDown("Fire1"))
 		{
-			m_weaponRef.TryShot(diff);
+			m_weaponRef.TryShot(false);
 			//Debug.Log(m_gunRef.rotation.eulerAngles);
 		}
 	}
 
-	private void ChangeWeapon(Weapon newWeapon)
+	private void ChangeWeapon(WeaponController newWeapon)
 	{
 		m_weaponRef = newWeapon;
 	}
@@ -101,7 +101,7 @@ public class PlayerManager : MonoBehaviour
 	{
 		m_bodyRef = this.transform.GetChild(0);
 		m_mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition) - m_gunRef.position;
-		m_weaponRef = m_gunRef.GetChild(0).GetComponent<Weapon>();
+		m_weaponRef = m_gunRef.GetChild(0).GetComponent<WeaponController>();
 	}
 
 }
