@@ -7,16 +7,33 @@ using UnityEngine.SceneManagement;
  using UnityEditor;
  #endif
 
+[System.Serializable]
+ public struct Permission
+ {
+	 public bool canMove;
+	 public bool canDash;
+	 public bool canInteract;
+ }
+
+[System.Serializable]
+ public enum State
+ {
+	 None, Idle, Move, Dash, Parry, Interact, Dialogue, Die
+ }
+
 [RequireComponent(typeof(MovementController))]
 [RequireComponent(typeof(AimController))]
 [RequireComponent(typeof(DashController))]
 [RequireComponent(typeof(ParryController))]
+[RequireComponent(typeof(InteractController))]
 public class Player : Pawn
 {
 	//Properties
 	[Header("Properties")]
 	[Tooltip("Player speed"), SerializeField] private float speed;
 	[SerializeField] private ENUM_Input input;
+	[SerializeField] Dictionary<State, Permission> Abilities;
+
 	private bool shootReset;
 
 	//References
@@ -28,6 +45,7 @@ public class Player : Pawn
 	private AimController aimController;
 	private DashController dashController;
 	private ParryController parryController;
+	private InteractController interactController;
 
 	void Start ()
 	{
@@ -37,13 +55,11 @@ public class Player : Pawn
 	protected override void Initialization()
 	{
 		base.Initialization();
-		if(input != ENUM_Input.None)
-		{
-			if(Input.GetJoystickNames().Length > 0)
-				input = ENUM_Input.Joystick;
-			else
-				input = ENUM_Input.Mouse;
-		}
+
+		if(Input.GetJoystickNames().Length > 0)
+			input = ENUM_Input.Joystick;
+		else
+			input = ENUM_Input.Mouse;
 
 		shootReset = true;
 
@@ -57,6 +73,7 @@ public class Player : Pawn
 
 		dashController = this.GetComponent<DashController>();
 		parryController = this.GetComponent<ParryController>();
+		interactController = this.GetComponent<InteractController>();
 	}
 
 	public override void ApplyDamages(float damages)
@@ -123,6 +140,11 @@ public class Player : Pawn
 				this.GetComponent<Animator>().SetTrigger("Dash");
 				//this.GetComponent<Animator>().speed = 1/(dashController.GetDashRange()/dashController.GetDashSpeed());
 			}
+		}
+
+		if(Input.GetButtonDown("Interact"))
+		{
+			interactController.TryInteract();
 		}
 
 		if(diff.x < 0f)//Player aiming left

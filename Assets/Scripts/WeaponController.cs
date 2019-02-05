@@ -45,14 +45,11 @@ public class WeaponController : MonoBehaviour {
                 return false;
         }
 
-        if(coolDown <= 0.0f)
-        {
+        if(coolDown <= 0.0f){
             Shot();
 
             return true;
-        }
-        else
-        {
+        }else{
             Debug.Log("[Info] Cannot shoot, weapon still in cooldown.");
 
             return false;

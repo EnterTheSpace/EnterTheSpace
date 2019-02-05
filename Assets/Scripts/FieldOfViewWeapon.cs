@@ -23,7 +23,7 @@ public class FieldOfViewWeapon : Editor
 		Handles.DrawLine(wp.BarrelRef().position, wp.BarrelRef().position + viewAngleB * wp.distance);
 		Handles.DrawLine(wp.BarrelRef().position, wp.BarrelRef().position + viewStraight * wp.distance);
 
-		Handles.color = Color.red;
+		Handles.color = Color.red;	
         uint nbProj = (wp.projPerShot > 0) ? wp.projPerShot : 1;
         float angleStep = (nbProj % 2 == 0) ? (wp.dispersion / nbProj): (wp.dispersion / (nbProj - 1) );
 
