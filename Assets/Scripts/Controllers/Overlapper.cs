@@ -28,8 +28,9 @@ public class Overlapper : MonoBehaviour {
 
     public T GetFirstObject<T>() {
         for (int i = 0; i < overlapped.Count; i++) {
-            if (overlapped[i].GetComponent<T>() != null)
-                return overlapped[i].GetComponent<T>();
+            if(overlapped[i]!=null)
+                if (overlapped[i].GetComponent<T>() != null)
+                    return overlapped[i].GetComponent<T>();
         }
         return default(T);
     }

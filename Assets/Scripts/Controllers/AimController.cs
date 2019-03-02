@@ -34,7 +34,8 @@ public class AimController : MonoBehaviour
 			targetDirection = new Vector3(	Input.GetAxisRaw("Look_X"), Input.GetAxisRaw("Look_Y"), 0f);
 			break;
 			default:
-			targetDirection = (targetTrans.position - aimingTrans.position).normalized;
+                if(targetTrans && aimingTrans)
+			        targetDirection = (targetTrans.position - aimingTrans.position).normalized;
 			break;
 		}
 
