@@ -8,6 +8,7 @@ public struct ProjectileInfos
     public float speed;
     public float damages;
     [HideInInspector] public Vector3 direction;
+    [HideInInspector] public Pawn owner;
     public float destroyer;
     public bool bounce;
 }
@@ -27,7 +28,7 @@ public class Projectile : MonoBehaviour
         cCollider = this.GetComponent<Collider2D>();
     }
 
-    public void Initialization(ProjectileInfos infos, Vector3 direction)
+    public void Initialization(ProjectileInfos infos, Vector3 direction, Pawn owner)
     {
         this.infos = infos;
 
@@ -37,7 +38,8 @@ public class Projectile : MonoBehaviour
             this.cCollider.isTrigger = false;
         else
             this.cCollider.isTrigger = true;
-        this.rigidBody.velocity = this.infos.direction * this.infos.speed;
+        this.rigidBody.velocity = (this.infos.direction * this.infos.speed);
+        this.infos.owner = owner;
 
         Invoke("Destructor", this.infos.destroyer);
     }
@@ -49,11 +51,15 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!other.CompareTag("Grid")){
-            if(other.gameObject.GetComponent<Pawn>() != null && !other.CompareTag("Parry"))
+        if(!other.CompareTag("Grid"))
+        {
+            if(other.gameObject.GetComponent<Pawn>() != null)
             {
-                other.gameObject.GetComponent<Pawn>().ApplyDamages(this.infos.damages);
-                Destructor();
+                if(other.gameObject.GetComponent<Pawn>() != this.infos.owner && !other.CompareTag("Parry"))
+                {
+                    other.gameObject.GetComponent<Pawn>().ApplyDamages(this.infos.damages);
+                    Destructor();
+                }
             }else if(other.gameObject.GetComponent<Projectile>() == null)
             {
                 Destructor();
@@ -65,8 +71,11 @@ public class Projectile : MonoBehaviour
     {
         if(other.gameObject.GetComponent<Pawn>() != null)
         {
-            other.gameObject.GetComponent<Pawn>().ApplyDamages(this.infos.damages);
-            Destructor();
+            if(other.gameObject.GetComponent<Pawn>() != this.infos.owner)
+            {
+                other.gameObject.GetComponent<Pawn>().ApplyDamages(this.infos.damages);
+                Destructor();
+            }
         }else if(other.gameObject.GetComponent<Projectile>() == null && !this.infos.bounce)
         {
             Destructor();

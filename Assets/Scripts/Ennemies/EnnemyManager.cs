@@ -43,6 +43,7 @@ public class EnnemyManager : Pawn {
 		follow = GetComponent<Following>();
 		attack = GetComponent<Attacking>();
 		visibleTargets = null;
+        Initialization();
 	}
 	
 	// Update is called once per frame
@@ -103,7 +104,6 @@ public class EnnemyManager : Pawn {
             follow = null;
             nav.Stop();
             gameObject.GetComponent<Animator>().SetTrigger("isDead");
-            DestroyPawn();
         }
     }
 }
