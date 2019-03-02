@@ -13,6 +13,10 @@ public class FieldOfView : MonoBehaviour {
 	[HideInInspector]
 	public Transform visibleTarget;
 
+    /// <summary>
+    /// Look if player is behind obstacles
+    /// </summary>
+    /// <returns>Transform of the target</returns>
 	public Transform FindVisibleTargets() {
 		visibleTarget = null;
 		Collider2D[] targetsInViewRadius = Physics2D.OverlapCircleAll(transform.position, viewRadius, targetMask);

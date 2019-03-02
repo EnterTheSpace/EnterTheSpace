@@ -14,21 +14,28 @@ public class Escaping : MonoBehaviour {
 	[SerializeField]
 	private LayerMask obstacleMask; 
 
-	public float stopDistance=.1f;
-
+	/// <summary>
+    /// NavAgent escape from Player.
+    /// </summary>
+    /// <param name="player">The player you want to escape from.</param>
+    /// <param name="nav">The ennemy who escape from player.</param>
 	public void Escape(GameObject player, PolyNavAgent nav){
 		if(isEscaping){
-			if(Vector2.Distance(transform.position,player.transform.position)<escapeDistance-stopDistance){
+			if(Vector2.Distance(transform.position,player.transform.position)<escapeDistance){
 				Vector2 opposite = (transform.position-player.transform.position).normalized;
 
 				RaycastHit2D ray = Physics2D.Raycast(transform.position, opposite + player.GetComponent<Rigidbody2D>().velocity,Mathf.Infinity ,obstacleMask);
 				
 				if(ray){
-					Debug.DrawLine(transform.position, ray.point, Color.green);
-					nav.SetDestination(ray.point);
+                    #if UNITY_EDITOR
+                        Debug.DrawLine(transform.position, ray.point, Color.green);
+                    #endif
+                    nav.SetDestination(ray.point);
 				}
-				print("Escaping");
-			}
-		}
+                #if UNITY_EDITOR
+                    print("Escaping");
+                #endif
+            }
+        }
 	}
 }
