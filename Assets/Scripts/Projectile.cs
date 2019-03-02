@@ -11,6 +11,7 @@ public struct ProjectileInfos
     [HideInInspector] public Pawn owner;
     public float destroyer;
     public bool bounce;
+    public float scaleForce;
 }
 
 [RequireComponent(typeof(Collider2D))]
@@ -42,6 +43,12 @@ public class Projectile : MonoBehaviour
         this.infos.owner = owner;
 
         Invoke("Destructor", this.infos.destroyer);
+    }
+
+    private void FixedUpdate() {
+        if(infos.scaleForce > 0f) {
+            this.transform.localScale += new Vector3(infos.scaleForce, infos.scaleForce, 1f) * Time.deltaTime;
+        }
     }
 
     public void Destructor()

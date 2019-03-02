@@ -33,6 +33,7 @@ public class Boss : Pawn {
     [Header("Path"), LabelOverride("Update delay"), SerializeField]
     [Tooltip("Delay in second for updating the path.")]
     private float updatePathDelay = 1f;
+    [SerializeField] WeaponController weap;
 
     [SerializeField] private Cooldown atkCD;
     public Attack[] attacks;
@@ -139,6 +140,8 @@ public class Boss : Pawn {
             if(NextAtkPhase())
                 spriteRender.GetComponent<Animator>().SetTrigger(attacks[currentAttack].name);
         } else {
+            weap.TryShot(true);
+            weap.BarrelRef().Rotate(new Vector3(0f, 0f, 1f));
             attacks[currentAttack].cd.Decrease(Time.deltaTime);
         }
     }
