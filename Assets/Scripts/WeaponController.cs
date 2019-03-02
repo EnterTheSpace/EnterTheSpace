@@ -80,7 +80,7 @@ public class WeaponController : MonoBehaviour {
                 target = new Vector3(Mathf.Sin(shotRayAngleB * Mathf.Deg2Rad), Mathf.Cos(shotRayAngleB * Mathf.Deg2Rad), 0f);
                 shotRayAngleB -= angleStep;
             }else
-            {
+            {   
                 target = new Vector3(Mathf.Sin(shotRayAngleA * Mathf.Deg2Rad), Mathf.Cos(shotRayAngleA * Mathf.Deg2Rad), 0f);
                 shotRayAngleA += angleStep;
             }

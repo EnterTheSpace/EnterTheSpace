@@ -11,19 +11,20 @@ public class Pawn : MonoBehaviour
         get {return health;}
         set {health = value;}
     }
+    protected float maxHealth;
     [SerializeField, LabelOverride("Health bar widget")] protected HealthBar healthBar;
 
     protected virtual void Initialization()
     {
-        //Init
+        maxHealth = health;
     }
 
     public virtual void ApplyDamages(float damages)
     {
         health -= damages;
-        health = Mathf.Clamp(health, 0f, 100f);
-
-        healthBar.health = health * 0.01f;
+        health = Mathf.Clamp(health, 0f, maxHealth);
+        print(health / maxHealth);
+        healthBar.health = health / maxHealth;
         if(health <= 0f)
             Destroy(this.gameObject);
     }

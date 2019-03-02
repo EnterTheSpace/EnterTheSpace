@@ -28,4 +28,8 @@ public class Cooldown{
 	{
 		cooldown -= amount;
 	}
+
+    public float Value() {
+        return cooldown;
+    }
 }
