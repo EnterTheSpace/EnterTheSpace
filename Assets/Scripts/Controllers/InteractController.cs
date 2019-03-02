@@ -10,6 +10,7 @@ public class InteractController : MonoBehaviour
 
 	//References
 	private Interactable inRangeObject;
+    public Interactable InRangeObject { get { return inRangeObject; } protected set{inRangeObject = value; } }
 	private Overlapper overlapper;
 
 	private void Start() {
@@ -31,6 +32,26 @@ public class InteractController : MonoBehaviour
 		}
 	}
 
+    public Interactable TryRelease() {
+        print("Release");
+        if (inRangeObject != null) {
+            inRangeObject.Release();
+
+            return inRangeObject;
+        } else {
+            return null;
+        }
+    }
+
+    public bool TryNavigate(Vector2 joystick) {
+        if(inRangeObject.GetComponent<Shop>() != null) {
+            inRangeObject.GetComponent<Shop>().Navigate(joystick.y);
+
+            return true;
+        }
+        return false;
+    }
+
 	private void Check(){
 		Interactable temp = null;
 
@@ -40,7 +61,7 @@ public class InteractController : MonoBehaviour
 				inRangeObject.Highlight(true, true);
 			}else{
 				print("No interactable found");
-				if(inRangeObject != null){
+				if(inRangeObject != null) {
 					print("Unhighlighting object");
 					inRangeObject.Unhighlight();
 					inRangeObject = null;

@@ -22,11 +22,13 @@ public class Interactable : MonoBehaviour
 
 	//Properties
 	//State
-	public bool beingUsed;
-	public bool beingHighlighted;
-	
-	//References
-	private Collider2D colliderRef;
+	protected bool beingUsed;
+    public bool BeingUsed { get { return beingUsed; } set { beingUsed = value; } }
+    protected bool beingHighlighted;
+    public bool BeingHighlighted { get { return beingHighlighted; } set { beingHighlighted = value; } }
+
+    //References
+    private Collider2D colliderRef;
 
 	private void Start()
 	{

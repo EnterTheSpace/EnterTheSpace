@@ -26,7 +26,15 @@ public class Overlapper : MonoBehaviour {
 		return bestTarget;
 	}
 
-	private void OnTriggerEnter2D(Collider2D other) {
+    public T GetFirstObject<T>() {
+        for (int i = 0; i < overlapped.Count; i++) {
+            if (overlapped[i].GetComponent<T>() != null)
+                return overlapped[i].GetComponent<T>();
+        }
+        return default(T);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other) {
 		if(!overlapped.Contains(other.gameObject))
 			overlapped.Add(other.gameObject);
 	}

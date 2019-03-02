@@ -27,7 +27,12 @@ public class MovementController : MonoBehaviour
 		if(mB_inputBased)
 		{
 			//Moves the object considering inputs and its speed.
-			mV_direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            if(this.GetComponent<Player>() != null) {
+                if(!this.GetComponent<Player>().isInShop)
+                    mV_direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            } else
+                mV_direction = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
 		}
 	}
 
