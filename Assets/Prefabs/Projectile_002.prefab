@@ -38,7 +38,7 @@ Transform:
   m_GameObject: {fileID: 1675908551714304}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 2, y: 3.5, z: 2}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -86,7 +86,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.13, y: 0.13}
+  m_Size: {x: 0.12, y: 0.05}
   m_EdgeRadius: 0
 --- !u!114 &114046115249993144
 MonoBehaviour:
@@ -99,12 +99,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0d0468361c35074483394ae0aa80f3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_infos:
-    speed: 12
-    damages: 0.2
-    direction: {x: 0, y: 0, z: 0}
-    destroyer: 4
-    bounce: 0
 --- !u!212 &212855679125502354
 SpriteRenderer:
   m_ObjectHideFlags: 1
