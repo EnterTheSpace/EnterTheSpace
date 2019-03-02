@@ -24,7 +24,7 @@ public class Pawn : MonoBehaviour
         health -= damages;
 
         health = Mathf.Clamp(health, 0f, maxHealth);
-        print(health / maxHealth);
+
         healthBar.health = health / maxHealth;
         if(health <= 0f)
             Destroy(this.gameObject);

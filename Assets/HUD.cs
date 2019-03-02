@@ -26,7 +26,6 @@ public class HUD : MonoBehaviour
             UpdateInventory();
         }
     }
-
     public void UpdateInventory() {
         money.text = inventory.money.ToString();
         for (int i = 0; i < slots.Length; i++) {
