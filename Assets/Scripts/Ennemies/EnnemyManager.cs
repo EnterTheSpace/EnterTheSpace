@@ -19,10 +19,12 @@ public class EnnemyManager : Pawn {
 	[Header("Path"),LabelOverride("Update delay"),SerializeField]
 	[Tooltip("Delay in second for updating the path.")]
 	private float updatePathDelay = 1f;
-	
-	
-	//Privates
-	private PolyNavAgent nav;
+    [Header("Weapon"), LabelOverride("Has Weapon?"), SerializeField]
+    private bool hasWeapon;
+
+
+    //Privates
+    private PolyNavAgent nav;
 	private float currentTime;
 	private FieldOfView fow;
 	private Escaping escape;
@@ -48,6 +50,7 @@ public class EnnemyManager : Pawn {
 	
 	// Update is called once per frame
 	void Update () {
+        
         if(follow != null){ 
 		    currentTime += Time.deltaTime;
 
@@ -62,20 +65,56 @@ public class EnnemyManager : Pawn {
 			    if(currentTime > updatePathDelay){
 				    currentTime = follow.Follow(player,nav,currentTime);
 			    }
-			    //attack.Attack(player.transform.position,follow.minDistance);
-		    }
+            }
 		    else{	//S'il n'ai pas à la bonne distance
-			    if(follow.isFollowingPlayer){	// et que l'ennemis à un chemin à suivre
-				    nav.Stop();
-				    follow.isFollowingPlayer = false;
+			    if(follow.isFollowingPlayer){   // et que l'ennemis à un chemin à suivre
+                    follow.isFollowingPlayer = false;
+                    nav.Stop();
 				    print("Path cleared");
 			    }
 		    }
-        }
 
-	}
+            if (follow.isOverlapping)
+            {
+                GetComponent<AimController>().enabled = true;
+                GetComponent<AimController>().SetTarget(player.transform);
+            }
+            else
+            {
+                GetComponent<AimController>().SetTarget(lastVisibleTarget);
+                GetComponent<AimController>().enabled = false;
+            }
+        }
+        if (hasWeapon)
+            SpriteOrientation();
+    }
+
+    void SpriteOrientation()
+    {
+        Vector3 diff = GetComponent<AimController>().GetTargetDirection();
+        if (diff.x < 0f)//Player aiming left
+        {
+            if (!GetComponent<WeaponController>().m_weaponSprite.GetComponent<SpriteRenderer>().flipY)
+            {
+                GetComponent<WeaponController>().m_weaponSprite.GetComponent<SpriteRenderer>().flipY = true;
+                GetComponent<WeaponController>().BarrelRef().localPosition -= new Vector3(0f, 0.06f, 0f);
+            }
+            this.GetComponent<SpriteRenderer>().flipX = true;//Flip the character body sprite
+        }
+        else if (diff.x > 0f)//Player aiming right
+        {
+            if (GetComponent<WeaponController>().m_weaponSprite.GetComponent<SpriteRenderer>().flipY)
+            {
+                GetComponent<WeaponController>().m_weaponSprite.GetComponent<SpriteRenderer>().flipY = false;
+                GetComponent<WeaponController>().BarrelRef().localPosition += new Vector3(0f, 0.06f, 0f);
+
+            }
+            this.GetComponent<SpriteRenderer>().flipX = false;//Restore the character body and the gun sprites orientation
+        }
+    }
 
 	void FixedUpdate(){
+
         if (escape.isEscaping){
             escape.Escape(player, nav);
 
@@ -84,6 +123,14 @@ public class EnnemyManager : Pawn {
                 visibleTargets = fow.FindVisibleTargets();
                 if (visibleTargets != null)
                 {
+                    if (hasWeapon)
+                    {
+                        GetComponent<WeaponController>().TryShot(true);
+                    } 
+                    else
+                    {
+
+                    }
                     lastVisibleTarget = visibleTargets;
                 }
                 else
