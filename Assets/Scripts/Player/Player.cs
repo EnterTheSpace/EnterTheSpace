@@ -26,6 +26,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(DashController))]
 [RequireComponent(typeof(ParryController))]
 [RequireComponent(typeof(InteractController))]
+[RequireComponent(typeof(Overlapper))]
 public class Player : Pawn
 {
 	//Properties
