@@ -11,6 +11,8 @@ public class FollowingEditor : Editor {
 		if(follow.hasRadius){
 			Handles.color = Color.green;
 			Handles.DrawWireDisc(follow.transform.position , follow.transform.forward, follow.rangeRadius);
-		}
+            Handles.color = Color.green;
+            Handles.DrawWireDisc(follow.transform.position, follow.transform.forward, follow.minDistance);
+        }
 	}
 } 

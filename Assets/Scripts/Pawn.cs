@@ -24,7 +24,10 @@ public class Pawn : MonoBehaviour
         health = Mathf.Clamp(health, 0f, 100f);
 
         healthBar.health = health * 0.01f;
-        if(health <= 0f)
-            Destroy(this.gameObject);
+    }
+
+    public void DestroyPawn()
+    {
+        Destroy(this.gameObject);
     }
 }
