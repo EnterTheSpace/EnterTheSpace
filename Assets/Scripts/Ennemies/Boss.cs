@@ -83,6 +83,11 @@ public class Boss : Pawn {
             if (follow != null) {
                 currentTime += Time.deltaTime;
 
+                if (player.transform.position.x > transform.position.x)
+                    spriteRender.flipX = true;
+                else
+                    spriteRender.flipY = false;
+
                 if (!escape.isEscaping)
                     escapeDistance = follow.minDistance;
                 else
@@ -137,10 +142,14 @@ public class Boss : Pawn {
 
     public void HandleAttack() {
         if (attacks[currentAttack].cd.Ready()) {
-            if(NextAtkPhase())
+            if (NextAtkPhase()) {
                 spriteRender.GetComponent<Animator>().SetTrigger(attacks[currentAttack].name);
+                print("played : " + attacks[currentAttack].phases[attacks[currentAttack].currentPhase].name);
+            }
         } else {
-            weap.TryShot(true);
+            if (attacks[currentAttack].name == "shaka") {
+                weap.TryShot(true);
+            }
             weap.BarrelRef().Rotate(new Vector3(0f, 0f, 1f));
             attacks[currentAttack].cd.Decrease(Time.deltaTime);
         }
