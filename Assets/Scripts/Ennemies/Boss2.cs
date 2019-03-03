@@ -36,13 +36,15 @@ public class Boss2 : Pawn {
     private float escapeDistance;
     private bool isAttacking = false;
     public float lastMinDistance;
-    private bool isTriggered;
+    public bool isTriggered;
     private bool isColliding;
     private bool takedDamage;
+    private bool animIsPlaying;
 
     // Use this for initialization
     void Start()
     {
+        animIsPlaying = false;
         takedDamage = false;
         isTriggered = false;
         isColliding = false;
@@ -70,61 +72,60 @@ public class Boss2 : Pawn {
             if (spriteRender.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Sheep_Jump") &&
                     spriteRender.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
             {
+                animIsPlaying = true;
                 follow.minDistance = 0;
                 if (isTriggered){
                     spriteRender.GetComponent<Animator>().SetTrigger("beginFall");
                     spriteRender.GetComponent<Animator>().ResetTrigger("atkJump");
-                }
-            }
-
-            if (spriteRender.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Sheep_Falling") &&
-                    spriteRender.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime >= 1.0f)
-            {
-                if ((isTriggered || isColliding) && !takedDamage)
-                {
-                    player.GetComponent<Player>().ApplyDamages(damage);
-                    takedDamage = true;
+                    StartCoroutine(WaitFalling());
                 }
             }
         }
 
-            if (follow != null)
+        if (follow != null && !animIsPlaying)
+        {
+            currentTime += Time.deltaTime;
+
+            if (!escape.isEscaping)
+                escapeDistance = follow.minDistance;
+            else
+                escapeDistance = escape.escapeDistance;
+
+            //Si l'ennemie est à la bonne distance
+            if (Vector2.Distance(transform.position, player.transform.position) >= follow.minDistance + escapeDistance)
             {
-                currentTime += Time.deltaTime;
-
-                if (!escape.isEscaping)
-                    escapeDistance = follow.minDistance;
-                else
-                    escapeDistance = escape.escapeDistance;
-
-                //Si l'ennemie est à la bonne distance
-                if (Vector2.Distance(transform.position, player.transform.position) >= follow.minDistance + escapeDistance)
+                //Si l'ennemis peut bouger & que le player est dans la zone
+                if (currentTime > updatePathDelay)
                 {
-                    //Si l'ennemis peut bouger & que le player est dans la zone
-                    if (currentTime > updatePathDelay)
+                    currentTime = follow.Follow(player, nav, currentTime);
+                    if (player.transform.position.x > this.transform.position.x)
                     {
-                        currentTime = follow.Follow(player, nav, currentTime);
-                        if (player.transform.position.x > this.transform.position.x)
-                        {
-                            spriteRender.flipX = true;
-                        }
-                        else
-                        {
-                            spriteRender.flipX = false;
-                        }
+                        spriteRender.flipX = true;
                     }
-                }
-                else
-                {   //S'il n'ai pas à la bonne distance
-                    if (follow.isFollowingPlayer)
-                    {   // et que l'ennemis à un chemin à suivre
-                        follow.isFollowingPlayer = false;
-                        nav.Stop();
-                        print("Path cleared");
+                    else
+                    {
+                        spriteRender.flipX = false;
                     }
                 }
             }
+            else
+            {   //S'il n'ai pas à la bonne distance
+                if (follow.isFollowingPlayer)
+                {   // et que l'ennemis à un chemin à suivre
+                    follow.isFollowingPlayer = false;
+                    nav.Stop();
+                    print("Path cleared");
+                }
+            }
+        }
         
+    }
+
+    IEnumerator WaitFalling()
+    {
+        nav.Stop();
+        yield return new WaitForSeconds(2);
+        animIsPlaying = false;
     }
 
     void FixedUpdate()
@@ -144,10 +145,12 @@ public class Boss2 : Pawn {
                     {
                         spriteRender.GetComponent<Animator>().SetTrigger("atkJump");
                         spriteRender.GetComponent<Animator>().ResetTrigger("fallHitGround");
-                        GetComponent<CircleCollider2D>().isTrigger = true;
+                        GetComponent<CircleCollider2D>().enabled = true;
+                        spriteRender.GetComponent<CircleCollider2D>().enabled = false;
                         isAttacking = true;
                         currentTimeAttack = 0;
                         takedDamage = false;
+                        StartCoroutine(WaitFalling());
                     }
                 }
                 else
@@ -172,18 +175,6 @@ public class Boss2 : Pawn {
         }
     }
 
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-            isColliding = true;
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
-            isColliding = false;
-    }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player"))
@@ -194,5 +185,11 @@ public class Boss2 : Pawn {
     {
         if (collision.gameObject.CompareTag("Player"))
             isTriggered = false;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.CompareTag("Player"))
+            player.GetComponent<Player>().ApplyDamages(damage);
     }
 }

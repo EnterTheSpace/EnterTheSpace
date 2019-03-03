@@ -51,16 +51,22 @@ public class Projectile : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(!other.CompareTag("Grid"))
+
+        if (other.gameObject.CompareTag("Boss") && other.gameObject.GetComponent<Pawn>() == null)
         {
-            if(other.gameObject.GetComponent<Pawn>() != null)
+            other.gameObject.GetComponentInParent<Pawn>().ApplyDamages(this.infos.damages);
+            Destructor();
+        }
+        else if(!other.CompareTag("Grid"))
+        {
+            if(other.gameObject.GetComponent<Pawn>() != null && !other.gameObject.CompareTag("Boss"))
             {
                 if(other.gameObject.GetComponent<Pawn>() != this.infos.owner && !other.CompareTag("Parry"))
                 {
                     other.gameObject.GetComponent<Pawn>().ApplyDamages(this.infos.damages);
                     Destructor();
                 }
-            }else if(other.gameObject.GetComponent<Projectile>() == null)
+            }else if(other.gameObject.GetComponent<Projectile>() == null && !other.gameObject.CompareTag("Boss"))
             {
                 Destructor();
             }
@@ -69,7 +75,12 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.GetComponent<Pawn>() != null)
+        if (other.gameObject.CompareTag("Boss") && other.gameObject.GetComponent<Pawn>() == null)
+        {
+            other.gameObject.GetComponentInParent<Pawn>().ApplyDamages(this.infos.damages);
+            Destructor();
+        }
+        else if(other.gameObject.GetComponent<Pawn>() != null && !other.gameObject.CompareTag("Boss"))
         {
             if(other.gameObject.GetComponent<Pawn>() != this.infos.owner)
             {
