@@ -89,8 +89,7 @@ public class EnnemyManager : Pawn {
                 GetComponent<AimController>().enabled = false;
             }
         }
-        if (hasWeapon)
-            SpriteOrientation();
+        SpriteOrientation();
     }
 
     void SpriteOrientation()
