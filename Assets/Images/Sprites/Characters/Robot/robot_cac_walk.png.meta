@@ -93,18 +93,18 @@ TextureImporter:
       name: robot_cac_walk_0
       rect:
         serializedVersion: 2
-        x: 36
-        y: 5
-        width: 67
-        height: 117
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 0
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b3147ae1fcda74c49a7494df4ddd0bc9
+      spriteID: 61437ebeaaf95bc4ba85dad0d7f2c81c
       vertices: []
       indices: 
       edges: []
@@ -113,18 +113,18 @@ TextureImporter:
       name: robot_cac_walk_1
       rect:
         serializedVersion: 2
-        x: 155
-        y: 5
-        width: 69
-        height: 120
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 128
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fc2ffba253dfb9c4d901722830d134bc
+      spriteID: df924ccf12d021a41bff03c0e01234e7
       vertices: []
       indices: 
       edges: []
@@ -133,18 +133,18 @@ TextureImporter:
       name: robot_cac_walk_2
       rect:
         serializedVersion: 2
-        x: 275
-        y: 4
-        width: 85
-        height: 117
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 256
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b7893bffdfbf1da4ca5b12d0303a1310
+      spriteID: 6b8e1b9f9b3dd2b4288603752d1557d5
       vertices: []
       indices: 
       edges: []
@@ -153,18 +153,18 @@ TextureImporter:
       name: robot_cac_walk_3
       rect:
         serializedVersion: 2
-        x: 411
-        y: 4
-        width: 77
-        height: 116
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 384
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aef5f1d7f2f349a43802f021a3c87530
+      spriteID: b8b06c4ead437d644bc30c80f640cb23
       vertices: []
       indices: 
       edges: []
@@ -173,18 +173,18 @@ TextureImporter:
       name: robot_cac_walk_4
       rect:
         serializedVersion: 2
-        x: 555
-        y: 3
-        width: 41
-        height: 120
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 512
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5af8128e1b6482a4d9fcec96bd397f55
+      spriteID: d19b56547aa373d4eaed65f90f1f3970
       vertices: []
       indices: 
       edges: []
@@ -193,18 +193,18 @@ TextureImporter:
       name: robot_cac_walk_5
       rect:
         serializedVersion: 2
-        x: 672
-        y: 4
-        width: 63
-        height: 117
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        x: 640
+        y: 0
+        width: 128
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d81fb97f6bbe06a4e9c4d577bff227d5
+      spriteID: 9b77597cc385d014596096205d899e77
       vertices: []
       indices: 
       edges: []

@@ -33,6 +33,7 @@ public class EnnemyManager : Pawn {
 	private Transform visibleTargets;
 	private Transform lastVisibleTarget;
     private float escapeDistance;
+    private bool isAttacking = false;
 
 	// Use this for initialization
 	void Start () {
@@ -55,7 +56,8 @@ public class EnnemyManager : Pawn {
         else
             GetComponent<Animator>().SetBool("isMoving", false);
 
-        if (follow != null){ 
+        if (follow != null && !isAttacking)
+        { 
 		    currentTime += Time.deltaTime;
 
             if (!escape.isEscaping)
@@ -132,12 +134,16 @@ public class EnnemyManager : Pawn {
                     } 
                     else
                     {
-
+                        GetComponent<Animator>().SetBool("isAttacking", true);
+                        isAttacking = true;
+                        StartCoroutine(WaitUnitAttack());
                     }
                     lastVisibleTarget = visibleTargets;
                 }
                 else
                 {
+                    GetComponent<Animator>().SetBool("isAttacking", false);
+                    isAttacking = false;
                     if (lastVisibleTarget != null)
                     {
                         nav.SetDestination(lastVisibleTarget.position);
@@ -146,6 +152,21 @@ public class EnnemyManager : Pawn {
             }
         }
 	}
+
+    public void AnimAttack()
+    {
+        Transform Target = fow.FindVisibleTargets();
+        if (Target != null)
+        {
+            player.GetComponent<Player>().ApplyDamages(GetComponent<WeaponController>().m_projectileInfos.damages);
+        }
+    }
+
+    IEnumerator WaitUnitAttack()
+    {
+        yield return new WaitForSeconds(1);
+        nav.Stop();
+    }
 
     public override void ApplyDamages(float damages)
     {

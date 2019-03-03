@@ -90,10 +90,10 @@ TextureImporter:
       name: robot_cac_frappe_0
       rect:
         serializedVersion: 2
-        x: 31
-        y: 5
-        width: 72
-        height: 120
+        x: 0
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -101,7 +101,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 63fb4f174091c6941bfe778475fcfffa
+      spriteID: fb4821f53af658748a23fedc7eee8914
       vertices: []
       indices: 
       edges: []
@@ -110,10 +110,10 @@ TextureImporter:
       name: robot_cac_frappe_1
       rect:
         serializedVersion: 2
-        x: 164
-        y: 5
-        width: 68
-        height: 76
+        x: 128
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -121,7 +121,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a5fe18f175d12a840a930bf41c19f4e7
+      spriteID: 0df2d2f2963a516428529ad923f4ef50
       vertices: []
       indices: 
       edges: []
@@ -130,10 +130,10 @@ TextureImporter:
       name: robot_cac_frappe_2
       rect:
         serializedVersion: 2
-        x: 293
-        y: 5
-        width: 65
-        height: 74
+        x: 256
+        y: 0
+        width: 128
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,7 +141,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c598c904b9162ee43a0221c8ff6220a7
+      spriteID: 5410ca0cff59f3e4d899abd090a81d5b
       vertices: []
       indices: 
       edges: []
