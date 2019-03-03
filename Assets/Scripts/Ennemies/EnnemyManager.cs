@@ -50,8 +50,12 @@ public class EnnemyManager : Pawn {
 	
 	// Update is called once per frame
 	void Update () {
-        
-        if(follow != null){ 
+        if(nav.velocity.x != 0)
+            GetComponent<Animator>().SetBool("isMoving", true);
+        else
+            GetComponent<Animator>().SetBool("isMoving", false);
+
+        if (follow != null){ 
 		    currentTime += Time.deltaTime;
 
             if (!escape.isEscaping)
@@ -64,13 +68,13 @@ public class EnnemyManager : Pawn {
 			    //Si l'ennemis peut bouger & que le player est dans la zone
 			    if(currentTime > updatePathDelay){
 				    currentTime = follow.Follow(player,nav,currentTime);
-			    }
+                }
             }
 		    else{	//S'il n'ai pas à la bonne distance
 			    if(follow.isFollowingPlayer){   // et que l'ennemis à un chemin à suivre
                     follow.isFollowingPlayer = false;
                     nav.Stop();
-				    print("Path cleared");
+                    print("Path cleared");
 			    }
 		    }
 
@@ -99,7 +103,7 @@ public class EnnemyManager : Pawn {
                 GetComponent<WeaponController>().m_weaponSprite.GetComponent<SpriteRenderer>().flipY = true;
                 GetComponent<WeaponController>().BarrelRef().localPosition -= new Vector3(0f, 0.06f, 0f);
             }
-            this.GetComponent<SpriteRenderer>().flipX = true;//Flip the character body sprite
+            this.GetComponent<SpriteRenderer>().flipX = false;//Flip the character body sprite
         }
         else if (diff.x > 0f)//Player aiming right
         {
@@ -109,7 +113,7 @@ public class EnnemyManager : Pawn {
                 GetComponent<WeaponController>().BarrelRef().localPosition += new Vector3(0f, 0.06f, 0f);
 
             }
-            this.GetComponent<SpriteRenderer>().flipX = false;//Restore the character body and the gun sprites orientation
+            this.GetComponent<SpriteRenderer>().flipX = true;//Restore the character body and the gun sprites orientation
         }
     }
 
