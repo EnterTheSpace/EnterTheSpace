@@ -14,13 +14,14 @@ public class Overlapper : MonoBehaviour {
         Vector3 currentPosition = transform.position;
         foreach(GameObject potentialTarget in overlapped)
         {
-            Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
-            float dSqrToTarget = directionToTarget.sqrMagnitude;
-            
-			if(dSqrToTarget < closestDistanceSqr)
-            {
-                closestDistanceSqr = dSqrToTarget;
-                bestTarget = potentialTarget;
+            if(potentialTarget != null) {
+                Vector3 directionToTarget = potentialTarget.transform.position - currentPosition;
+                float dSqrToTarget = directionToTarget.sqrMagnitude;
+
+                if (dSqrToTarget < closestDistanceSqr) {
+                    closestDistanceSqr = dSqrToTarget;
+                    bestTarget = potentialTarget;
+                }
             }
         }
 		return bestTarget;

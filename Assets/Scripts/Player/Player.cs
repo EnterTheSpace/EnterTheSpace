@@ -36,6 +36,9 @@ public class Player : Pawn
 	[SerializeField] Dictionary<State, Permission> Abilities;
 
 	private bool shootReset;
+    private bool vulnerable;
+
+    private Cooldown dash;
 
 	//References
 	[Header("References")]
@@ -65,6 +68,7 @@ public class Player : Pawn
 			input = ENUM_Input.Mouse;
 
 		shootReset = true;
+        vulnerable = true;
         isInShop = false;
 
 		weaponRef = this.GetComponent<WeaponController>();
@@ -78,24 +82,33 @@ public class Player : Pawn
 		dashController = this.GetComponent<DashController>();
 		parryController = this.GetComponent<ParryController>();
 		interactController = this.GetComponent<InteractController>();
-	}
+
+        dash = new Cooldown();
+        dash.SetNew(dashController.cd);
+    }
 
 	public override void ApplyDamages(float damages)
 	{
-		base.ApplyDamages(damages);
-		if(health == 0f)
-		{
-			//Destroy(this.gameObject);//Death here
+        if (vulnerable) {
+            base.ApplyDamages(damages);
+            if (health == 0f) {
+                //Destroy(this.gameObject);//Death here
 
-			Scene currentScene = SceneManager.GetActiveScene();
+                Scene currentScene = SceneManager.GetActiveScene();
 
-			SceneManager.LoadScene(currentScene.name);
-		}
+                SceneManager.LoadScene(currentScene.name);
+            }
+        }
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
+        if (!dash.Ready()) {
+            dash.Decrease(Time.deltaTime);
+            vulnerable = false;
+        } else
+            vulnerable = true;
         Overlap();
 		Inputs();//Handles player inputs
 	}
@@ -146,6 +159,8 @@ public class Player : Pawn
             if (Input.GetButtonDown("Dash")) {
                 if (dashController.TryDash(mvmtController.GetDirection())) {
                     this.GetComponent<Animator>().SetTrigger("Dash");
+                    vulnerable = false;
+                    dash.Reset();
                     //this.GetComponent<Animator>().speed = 1/(dashController.GetDashRange()/dashController.GetDashSpeed());
                 }
             }
@@ -155,27 +170,32 @@ public class Player : Pawn
                 if (!weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY) {
                     weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY = true;
                     weaponRef.BarrelRef().localPosition -= new Vector3(0f, 0.06f, 0f);
+                    weaponRef.m_weaponSprite.transform.localPosition = new Vector3(0.1f, -0.011f, 0f);
                 }
-                this.GetComponent<SpriteRenderer>().flipX = true;//Flip the character body sprite
+                this.GetComponent<SpriteRenderer>().flipX = false;//Flip the character body sprite
                 if (Input.GetAxis("Horizontal") > 0.0f)//If the player is moving in the opposite direction (to the right), the correct running animation is played.
                 {
                     this.GetComponent<Animator>().SetBool("MoveForward", false);
+                    aimController.aimingTrans.localPosition = new Vector3(0.02f, -0.033f, 0f);
                 } else {
                     this.GetComponent<Animator>().SetBool("MoveForward", true);
+                    aimController.aimingTrans.localPosition = new Vector3(0.04f, -0.033f, 0f);
                 }
             } else if (diff.x > 0f)//Player aiming right
              {
                 if (weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY) {
                     weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY = false;
                     weaponRef.BarrelRef().localPosition += new Vector3(0f, 0.06f, 0f);
-
+                    weaponRef.m_weaponSprite.transform.localPosition = new Vector3(0.1f, 0.011f, 0f);
                 }
-                this.GetComponent<SpriteRenderer>().flipX = false;//Restore the character body and the gun sprites orientation
+                this.GetComponent<SpriteRenderer>().flipX = true;//Restore the character body and the gun sprites orientation
                 if (Input.GetAxis("Horizontal") < 0.0f)//If the player is moving in the opposite direction (to the left), the correct running animation is played.
                 {
                     this.GetComponent<Animator>().SetBool("MoveForward", false);
+                    aimController.aimingTrans.localPosition = new Vector3(-0.02f, -0.033f, 0f);
                 } else {
                     this.GetComponent<Animator>().SetBool("MoveForward", true);
+                    aimController.aimingTrans.localPosition = new Vector3(-0.04f, -0.033f, 0f);
                 }
             }
         } else {
