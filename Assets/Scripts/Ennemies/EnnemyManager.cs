@@ -33,6 +33,7 @@ public class EnnemyManager : Pawn {
 	private Transform visibleTargets;
 	private Transform lastVisibleTarget;
     private float escapeDistance;
+    private bool isAttacking = false;
 
 	// Use this for initialization
 	void Start () {
@@ -50,8 +51,13 @@ public class EnnemyManager : Pawn {
 	
 	// Update is called once per frame
 	void Update () {
-        
-        if(follow != null){ 
+        if(nav.velocity.x != 0)
+            GetComponent<Animator>().SetBool("isMoving", true);
+        else
+            GetComponent<Animator>().SetBool("isMoving", false);
+
+        if (follow != null && !isAttacking)
+        { 
 		    currentTime += Time.deltaTime;
 
             if (!escape.isEscaping)
@@ -64,13 +70,13 @@ public class EnnemyManager : Pawn {
 			    //Si l'ennemis peut bouger & que le player est dans la zone
 			    if(currentTime > updatePathDelay){
 				    currentTime = follow.Follow(player,nav,currentTime);
-			    }
+                }
             }
 		    else{	//S'il n'ai pas à la bonne distance
 			    if(follow.isFollowingPlayer){   // et que l'ennemis à un chemin à suivre
                     follow.isFollowingPlayer = false;
                     nav.Stop();
-				    print("Path cleared");
+                    print("Path cleared");
 			    }
 		    }
 
@@ -85,8 +91,7 @@ public class EnnemyManager : Pawn {
                 GetComponent<AimController>().enabled = false;
             }
         }
-        if (hasWeapon)
-            SpriteOrientation();
+        SpriteOrientation();
     }
 
     void SpriteOrientation()
@@ -99,7 +104,7 @@ public class EnnemyManager : Pawn {
                 GetComponent<WeaponController>().m_weaponSprite.GetComponent<SpriteRenderer>().flipY = true;
                 GetComponent<WeaponController>().BarrelRef().localPosition -= new Vector3(0f, 0.06f, 0f);
             }
-            this.GetComponent<SpriteRenderer>().flipX = true;//Flip the character body sprite
+            this.GetComponent<SpriteRenderer>().flipX = false;//Flip the character body sprite
         }
         else if (diff.x > 0f)//Player aiming right
         {
@@ -109,7 +114,7 @@ public class EnnemyManager : Pawn {
                 GetComponent<WeaponController>().BarrelRef().localPosition += new Vector3(0f, 0.06f, 0f);
 
             }
-            this.GetComponent<SpriteRenderer>().flipX = false;//Restore the character body and the gun sprites orientation
+            this.GetComponent<SpriteRenderer>().flipX = true;//Restore the character body and the gun sprites orientation
         }
     }
 
@@ -129,12 +134,16 @@ public class EnnemyManager : Pawn {
                     } 
                     else
                     {
-
+                        GetComponent<Animator>().SetBool("isAttacking", true);
+                        isAttacking = true;
+                        StartCoroutine(WaitUnitAttack());
                     }
                     lastVisibleTarget = visibleTargets;
                 }
                 else
                 {
+                    GetComponent<Animator>().SetBool("isAttacking", false);
+                    isAttacking = false;
                     if (lastVisibleTarget != null)
                     {
                         nav.SetDestination(lastVisibleTarget.position);
@@ -143,6 +152,21 @@ public class EnnemyManager : Pawn {
             }
         }
 	}
+
+    public void AnimAttack()
+    {
+        Transform Target = fow.FindVisibleTargets();
+        if (Target != null)
+        {
+            player.GetComponent<Player>().ApplyDamages(GetComponent<WeaponController>().m_projectileInfos.damages);
+        }
+    }
+
+    IEnumerator WaitUnitAttack()
+    {
+        yield return new WaitForSeconds(1);
+        nav.Stop();
+    }
 
     public override void ApplyDamages(float damages)
     {

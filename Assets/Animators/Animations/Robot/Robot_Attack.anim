@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Sheep_Falling
+  m_Name: Robot_Attack
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,12 +20,16 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 21300004, guid: 6eb9fc17c212d2f47a7ade0c3fc58133, type: 3}
+      value: {fileID: 21300000, guid: 787ae3a7a96c5eb46982e53f44db5972, type: 3}
+    - time: 0.33333334
+      value: {fileID: 21300002, guid: 787ae3a7a96c5eb46982e53f44db5972, type: 3}
+    - time: 0.6666667
+      value: {fileID: 21300004, guid: 787ae3a7a96c5eb46982e53f44db5972, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 20
+  m_SampleRate: 3
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -40,13 +44,15 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 21300004, guid: 6eb9fc17c212d2f47a7ade0c3fc58133, type: 3}
+    - {fileID: 21300000, guid: 787ae3a7a96c5eb46982e53f44db5972, type: 3}
+    - {fileID: 21300002, guid: 787ae3a7a96c5eb46982e53f44db5972, type: 3}
+    - {fileID: 21300004, guid: 787ae3a7a96c5eb46982e53f44db5972, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.05
+    m_StopTime: 1
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -66,8 +72,8 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0
-    functionName: OnEndFalling
+  - time: 0.6666667
+    functionName: AnimAttack
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
