@@ -6,7 +6,6 @@ TagManager:
   tags:
   - Parry
   - Grid
-  - Boss
   layers:
   - Default
   - TransparentFX
