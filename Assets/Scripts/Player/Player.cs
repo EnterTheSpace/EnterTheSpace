@@ -116,7 +116,6 @@ public class Player : Pawn
     private void Overlap() {
         if(this.GetComponent<Overlapper>().GetFirstObject<Shop>() != null && this.GetComponent<Overlapper>().GetFirstObject<Shop>().BeingUsed) {
             isInShop = true;
-            print("SHOP");
         } else {
             isInShop = false;
         }
@@ -170,32 +169,32 @@ public class Player : Pawn
                 if (!weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY) {
                     weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY = true;
                     weaponRef.BarrelRef().localPosition -= new Vector3(0f, 0.06f, 0f);
-                    weaponRef.m_weaponSprite.transform.localPosition = new Vector3(0.1f, -0.011f, 0f);
+                    weaponRef.m_weaponSprite.transform.localPosition = new Vector3(0.174f, -0.02f, 0f);
                 }
                 this.GetComponent<SpriteRenderer>().flipX = false;//Flip the character body sprite
                 if (Input.GetAxis("Horizontal") > 0.0f)//If the player is moving in the opposite direction (to the right), the correct running animation is played.
                 {
                     this.GetComponent<Animator>().SetBool("MoveForward", false);
-                    aimController.aimingTrans.localPosition = new Vector3(0.02f, -0.033f, 0f);
+                    aimController.aimingTrans.localPosition = new Vector3(0.065f, -0.08f, 0f);
                 } else {
                     this.GetComponent<Animator>().SetBool("MoveForward", true);
-                    aimController.aimingTrans.localPosition = new Vector3(0.04f, -0.033f, 0f);
+                    aimController.aimingTrans.localPosition = new Vector3(0.036f, -0.033f, 0f);
                 }
             } else if (diff.x > 0f)//Player aiming right
              {
                 if (weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY) {
                     weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().flipY = false;
                     weaponRef.BarrelRef().localPosition += new Vector3(0f, 0.06f, 0f);
-                    weaponRef.m_weaponSprite.transform.localPosition = new Vector3(0.1f, 0.011f, 0f);
+                    weaponRef.m_weaponSprite.transform.localPosition = new Vector3(0.174f, 0.014f, 0f);
                 }
                 this.GetComponent<SpriteRenderer>().flipX = true;//Restore the character body and the gun sprites orientation
                 if (Input.GetAxis("Horizontal") < 0.0f)//If the player is moving in the opposite direction (to the left), the correct running animation is played.
                 {
                     this.GetComponent<Animator>().SetBool("MoveForward", false);
-                    aimController.aimingTrans.localPosition = new Vector3(-0.02f, -0.033f, 0f);
+                    aimController.aimingTrans.localPosition = new Vector3(-0.065f, -0.08f, 0f);
                 } else {
                     this.GetComponent<Animator>().SetBool("MoveForward", true);
-                    aimController.aimingTrans.localPosition = new Vector3(-0.04f, -0.033f, 0f);
+                    aimController.aimingTrans.localPosition = new Vector3(-0.036f, -0.033f, 0f);
                 }
             }
         } else {
