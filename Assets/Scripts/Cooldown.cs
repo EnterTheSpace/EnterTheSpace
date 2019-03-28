@@ -14,6 +14,10 @@ public class Cooldown{
 		cooldown = value;
 	}
 
+    public void SetNew(float value) {
+        duration = value;
+    }
+
 	public void Reset()
 	{
 		cooldown = duration;

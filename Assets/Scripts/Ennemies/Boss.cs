@@ -5,7 +5,22 @@ using UnityEngine.AI;
 using UnityEditor;
 using PolyNav;
 
+[System.Serializable]
+public struct Attack {
+    [System.Serializable]
+    public struct AtkPhase {
+        public string name;
+        public float duration;
+    }
+    public string name;
+    public AtkPhase[] phases;
+    public int currentPhase;
+    public Cooldown cd;
+}
+
+
 [RequireComponent(typeof(FieldOfView), typeof(Following), typeof(Escaping))]
+[RequireComponent(typeof(Attacking))]
 public class Boss : Pawn {
 
     //SerializeFields
@@ -18,9 +33,12 @@ public class Boss : Pawn {
     [Header("Path"), LabelOverride("Update delay"), SerializeField]
     [Tooltip("Delay in second for updating the path.")]
     private float updatePathDelay = 1f;
-    [SerializeField] private SpriteRenderer spriteRender;
+    [SerializeField] WeaponController weap;
+
     [SerializeField] private Cooldown atkCD;
-    [SerializeField] private Cooldown jmpMoveTime;
+    public Attack[] attacks;
+    private int currentAttack;
+    private bool isAttacking;
 
     //Privates
     private PolyNavAgent nav;
@@ -28,71 +46,86 @@ public class Boss : Pawn {
     private FieldOfView fow;
     private Escaping escape;
     private Following follow;
+    private Attacking attack;
     private Transform visibleTargets;
     private Transform lastVisibleTarget;
+    private float escapeDistance;
 
-    private bool isAttacking;
-    private Vector2 startJmpPos;
+    private SpriteRenderer spriteRender;
 
     // Use this for initialization
     void Start() {
-        Initialization();
+        atkCD.Reset();
+
+        escapeDistance = 0;
         nav = GetComponent<PolyNavAgent>();
         if (!hasCollision)
             nav.GetComponent<CircleCollider2D>().isTrigger = true;
+        spriteRender = this.GetComponent<SpriteRenderer>();
         fow = GetComponent<FieldOfView>();
         escape = GetComponent<Escaping>();
         follow = GetComponent<Following>();
+        attack = GetComponent<Attacking>();
         visibleTargets = null;
+        Initialization();
     }
 
     // Update is called once per frame
     void Update() {
-        if (!atkCD.Ready()) {
-            atkCD.Decrease(Time.deltaTime);
-        } else if(!isAttacking){
-            Attack();
-        }
-
-        currentTime += Time.deltaTime;
-        //Si l'ennemie est à la bonne distance
+        print(isAttacking);
         if (!isAttacking) {
-            if (Vector2.Distance(transform.position, player.transform.position) >= follow.minDistance + escape.escapeDistance) {
-                //Si l'ennemis peut bouger & que le player est dans la zone
-                if (currentTime > updatePathDelay) {
-                    currentTime = follow.Follow(player, nav, currentTime);
-                    if (player.transform.position.x > this.transform.position.x) {
-                        spriteRender.flipX = true;
-                    } else {
-                        spriteRender.flipX = false;
+            if (!atkCD.Ready()) {
+                atkCD.Decrease(Time.deltaTime);
+            }else {
+                Attack();
+            }
+
+            if (follow != null) {
+                currentTime += Time.deltaTime;
+
+                if (player.transform.position.x > transform.position.x)
+                    spriteRender.flipX = true;
+                else
+                    spriteRender.flipY = false;
+
+                if (!escape.isEscaping)
+                    escapeDistance = follow.minDistance;
+                else
+                    escapeDistance = escape.escapeDistance;
+
+                //Si l'ennemie est à la bonne distance
+                if (Vector2.Distance(transform.position, player.transform.position) >= follow.minDistance + escapeDistance) {
+                    //Si l'ennemis peut bouger & que le player est dans la zone
+                    if (currentTime > updatePathDelay) {
+                        currentTime = follow.Follow(player, nav, currentTime);
                     }
-                }
-            } else {    //S'il n'ai pas à la bonne distance
-                if (follow.isFollowingPlayer) { // et que l'ennemis à un chemin à suivre
-                    nav.Stop();
-                    follow.isFollowingPlayer = false;
-                    print("Path cleared");
+                    //attack.Attack(player.transform.position,follow.minDistance);
+                } else {    //S'il n'ai pas à la bonne distance
+                    if (follow.isFollowingPlayer) { // et que l'ennemis à un chemin à suivre
+                        nav.Stop();
+                        follow.isFollowingPlayer = false;
+                        print("Path cleared");
+                    }
                 }
             }
         } else {
-            MoveTo();
+            HandleAttack();
         }
     }
 
     void FixedUpdate() {
-        bool canEscape = true;
-        if (escape.isEscaping) {
-            if (canEscape)
+        if (!isAttacking) {
+            if (escape.isEscaping) {
                 escape.Escape(player, nav);
 
-            if (follow.isOverlapping) {
-                visibleTargets = fow.FindVisibleTargets();
-                if (visibleTargets != null) {
-                    lastVisibleTarget = visibleTargets;
-                } else {
-                    if (lastVisibleTarget != null) {
-                        nav.SetDestination(lastVisibleTarget.position);
-                        canEscape = false;
+                if (follow.isOverlapping) {
+                    visibleTargets = fow.FindVisibleTargets();
+                    if (visibleTargets != null) {
+                        lastVisibleTarget = visibleTargets;
+                    } else {
+                        if (lastVisibleTarget != null) {
+                            nav.SetDestination(lastVisibleTarget.position);
+                        }
                     }
                 }
             }
@@ -100,21 +133,40 @@ public class Boss : Pawn {
     }
 
     public void Attack() {
+        currentAttack = Random.Range(0, attacks.Length-1);
         isAttacking = true;
-        startJmpPos = this.transform.position;
-        jmpMoveTime.Reset();
-        atkCD.Reset();
-        spriteRender.GetComponent<Animator>().SetTrigger("atkJump");
+        attacks[currentAttack].cd.SetNew(attacks[currentAttack].phases[attacks[currentAttack].currentPhase].duration);
+        attacks[currentAttack].cd.Reset();
+        spriteRender.GetComponent<Animator>().SetTrigger(attacks[currentAttack].name);
     }
 
-    public void MoveTo() {
-        if (!jmpMoveTime.Ready()) {
-            jmpMoveTime.Decrease(Time.deltaTime);
-
-            this.transform.position = Vector2.Lerp(startJmpPos, player.transform.position, jmpMoveTime.Value() / jmpMoveTime.duration);
+    public void HandleAttack() {
+        if (attacks[currentAttack].cd.Ready()) {
+            if (NextAtkPhase()) {
+                spriteRender.GetComponent<Animator>().SetTrigger(attacks[currentAttack].name);
+                print("played : " + attacks[currentAttack].phases[attacks[currentAttack].currentPhase].name);
+            }
         } else {
-            spriteRender.GetComponent<Animator>().SetTrigger("fallHitGround");
+            if (attacks[currentAttack].name == "shaka") {
+                weap.TryShot(true);
+            }
+            weap.BarrelRef().Rotate(new Vector3(0f, 0f, 1f));
+            attacks[currentAttack].cd.Decrease(Time.deltaTime);
+        }
+    }
+
+    public bool NextAtkPhase() {
+        if(attacks[currentAttack].currentPhase < attacks[currentAttack].phases.Length - 1) {
+            attacks[currentAttack].currentPhase++;
+            attacks[currentAttack].cd.SetNew(attacks[currentAttack].phases[attacks[currentAttack].currentPhase].duration);
+
+            return true;
+        } else {
+            spriteRender.GetComponent<Animator>().SetTrigger("idle");
             isAttacking = false;
+            atkCD.Reset();
+
+            return false;
         }
     }
 }
