@@ -14,6 +14,7 @@ public class MovementController : MonoBehaviour
 	private bool mB_inputBased;
 		//REFERENCES
 	private Rigidbody2D mRef_rigidBody;
+    public AudioClip[] sounds;
 
 	// Update is called once per frame
 	void FixedUpdate ()
@@ -40,6 +41,10 @@ public class MovementController : MonoBehaviour
 	{
 		mRef_rigidBody.velocity = mV_direction * mFlt_MovementSpeed * SPEED_MULTIPLIER * Time.deltaTime;
 	}
+
+    public void WalkStep() {
+        this.GetComponent<AudioSource>().PlayOneShot(sounds[Random.Range(0, sounds.Length - 1)]);
+    }
 
 	public void SetDirection(Vector3 direction)
 	{

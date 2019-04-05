@@ -20,6 +20,7 @@ public class WeaponController : MonoBehaviour {
     [Tooltip("Owner gameobject reference"), SerializeField] private GameObject m_ownerRef;
     private List<Projectile> mL_firedBullets;
     public ProjectileInfos m_projectileInfos;
+    public AudioClip[] sounds;
 
 	// Use this for initialization
     private void Start ()
@@ -59,6 +60,9 @@ public class WeaponController : MonoBehaviour {
     //TO DO : Create an overloaded function of Shot() with Vector3 direction parameter
     private void Shot()
     {
+        if(this.GetComponent<AudioSource>() != null)
+            this.GetComponent<AudioSource>().PlayOneShot(sounds[Random.Range(0, sounds.Length - 1)]);
+            //audioPlayer.TryPlayInRndSource(new List<AudioSource>(GetComponents<AudioSource>()), sounds[0]);
         coolDown = 1/fireRate;
         
         uint nbProj = (projPerShot > 0) ? projPerShot : 1;

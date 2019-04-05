@@ -16,6 +16,7 @@ public struct Attack {
     public AtkPhase[] phases;
     public int currentPhase;
     public Cooldown cd;
+    public AudioClip[] sound;
 }
 
 
@@ -39,7 +40,7 @@ public class Boss : Pawn {
     public Attack[] attacks;
     private int currentAttack;
     private bool isAttacking;
-
+    
     //Privates
     private PolyNavAgent nav;
     private float currentTime;
@@ -113,6 +114,21 @@ public class Boss : Pawn {
         }
     }
 
+
+    public override void ApplyDamages(float damages) {
+        if(Random.Range(0, 3) == 2)
+            this.GetComponent<AudioSource>().PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length - 1)], .5f);
+        if (GetComponent<Animation>() != null)
+            GetComponent<Animation>().Play("Hit");
+        health -= damages;
+
+        health = Mathf.Clamp(health, 0f, maxHealth);
+
+        healthBar.health = health / maxHealth;
+        if (health <= 0f)
+            Destroy(this.gameObject);
+    }
+
     void FixedUpdate() {
         if (!isAttacking) {
             if (escape.isEscaping) {
@@ -133,7 +149,10 @@ public class Boss : Pawn {
     }
 
     public void Attack() {
-        currentAttack = Random.Range(0, attacks.Length-1);
+        currentAttack = Random.Range(0, attacks.Length - 1);
+        for (int i = 0; i < attacks[currentAttack].sound.Length; i++) {
+            this.GetComponent<AudioSource>().PlayOneShot(attacks[currentAttack].sound[i]);
+        }
         isAttacking = true;
         attacks[currentAttack].cd.SetNew(attacks[currentAttack].phases[attacks[currentAttack].currentPhase].duration);
         attacks[currentAttack].cd.Reset();

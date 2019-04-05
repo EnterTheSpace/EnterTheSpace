@@ -10,7 +10,7 @@ PrefabInstance:
     - target: {fileID: 3951424283081964929, guid: e3424e71457f4fe47b7c2413df0b732a,
         type: 3}
       propertyPath: m_Name
-      value: RobotDistance
+      value: RobotDistanceCac
       objectReference: {fileID: 0}
     - target: {fileID: 3951424283081964949, guid: e3424e71457f4fe47b7c2413df0b732a,
         type: 3}
@@ -67,10 +67,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3951424283081964938, guid: e3424e71457f4fe47b7c2413df0b732a,
+    - target: {fileID: 3951424283081964940, guid: e3424e71457f4fe47b7c2413df0b732a,
         type: 3}
-      propertyPath: _map
-      value: 
+      propertyPath: atkSounds.Array.size
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3951424283081964940, guid: e3424e71457f4fe47b7c2413df0b732a,
         type: 3}
@@ -82,6 +82,36 @@ PrefabInstance:
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 7826637436760486836}
+    - target: {fileID: 3951424283081964940, guid: e3424e71457f4fe47b7c2413df0b732a,
+        type: 3}
+      propertyPath: atkSounds.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 88e767b08f577a448a9b624a378eede8, type: 3}
+    - target: {fileID: 3951424283081964940, guid: e3424e71457f4fe47b7c2413df0b732a,
+        type: 3}
+      propertyPath: atkSounds.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: d95aa14e1245e1249996bd752238c793, type: 3}
+    - target: {fileID: 3951424283081964940, guid: e3424e71457f4fe47b7c2413df0b732a,
+        type: 3}
+      propertyPath: atkSounds.Array.data[2]
+      value: 
+      objectReference: {fileID: 8300000, guid: 88cac789f52af8b4a88e964083699f74, type: 3}
+    - target: {fileID: 3951424283081964938, guid: e3424e71457f4fe47b7c2413df0b732a,
+        type: 3}
+      propertyPath: _map
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951424283958936157, guid: e3424e71457f4fe47b7c2413df0b732a,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951424283958936157, guid: e3424e71457f4fe47b7c2413df0b732a,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3951424283081964930, guid: e3424e71457f4fe47b7c2413df0b732a,
         type: 3}
       propertyPath: aimingTrans
@@ -107,16 +137,6 @@ PrefabInstance:
       propertyPath: m_FillRect
       value: 
       objectReference: {fileID: 7826637437443018115}
-    - target: {fileID: 3951424283958936157, guid: e3424e71457f4fe47b7c2413df0b732a,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3951424283958936157, guid: e3424e71457f4fe47b7c2413df0b732a,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3424e71457f4fe47b7c2413df0b732a, type: 3}
 --- !u!1 &7826637438630687327 stripped

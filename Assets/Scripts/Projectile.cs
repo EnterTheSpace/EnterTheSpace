@@ -63,15 +63,16 @@ public class Projectile : MonoBehaviour
         {
             other.gameObject.GetComponentInParent<Pawn>().ApplyDamages(this.infos.damages);
             Destructor();
-        }
-        else if(!other.CompareTag("Grid"))
+        }else if(!other.CompareTag("Grid"))
         {
             if(other.gameObject.GetComponent<Pawn>() != null && !other.gameObject.CompareTag("Boss"))
             {
                 if(other.gameObject.GetComponent<Pawn>() != this.infos.owner && !other.CompareTag("Parry"))
                 {
-                    other.gameObject.GetComponent<Pawn>().ApplyDamages(this.infos.damages);
-                    Destructor();
+                    if (!(other.CompareTag("Player") && !other.GetComponent<Player>().vulnerable) ) {
+                        other.gameObject.GetComponent<Pawn>().ApplyDamages(this.infos.damages);
+                        Destructor();
+                    }
                 }
             }else if(other.gameObject.GetComponent<Projectile>() == null && !other.gameObject.CompareTag("Boss"))
             {

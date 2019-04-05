@@ -36,7 +36,7 @@ public class Player : Pawn
 	[SerializeField] Dictionary<State, Permission> Abilities;
 
 	private bool shootReset;
-    private bool vulnerable;
+    [HideInInspector]public bool vulnerable;
 
     private Cooldown dash;
 
@@ -84,12 +84,13 @@ public class Player : Pawn
 		interactController = this.GetComponent<InteractController>();
 
         dash = new Cooldown();
-        dash.SetNew(dashController.cd);
+        dash.SetNew(dashController.GetDashRange()/dashController.GetDashSpeed());
     }
 
 	public override void ApplyDamages(float damages)
 	{
         if (vulnerable) {
+            this.GetComponent<Animation>().Play("Hit");
             base.ApplyDamages(damages);
             if (health == 0f) {
                 //Destroy(this.gameObject);//Death here

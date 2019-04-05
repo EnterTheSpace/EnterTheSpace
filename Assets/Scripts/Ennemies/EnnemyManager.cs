@@ -21,7 +21,7 @@ public class EnnemyManager : Pawn {
 	private float updatePathDelay = 1f;
     [Header("Weapon"), LabelOverride("Has Weapon?"), SerializeField]
     private bool hasWeapon;
-
+    public AudioClip[] atkSounds;
 
     //Privates
     private PolyNavAgent nav;
@@ -65,31 +65,29 @@ public class EnnemyManager : Pawn {
             else
                 escapeDistance = escape.escapeDistance;
 		
-		    //Si l'ennemie est à la bonne distance
-		    if(Vector2.Distance(transform.position,player.transform.position)>=follow.minDistance+escapeDistance){	
-			    //Si l'ennemis peut bouger & que le player est dans la zone
-			    if(currentTime > updatePathDelay){
-				    currentTime = follow.Follow(player,nav,currentTime);
+            if(player != null) {
+                //Si l'ennemie est à la bonne distance
+                if (Vector2.Distance(transform.position, player.transform.position) >= follow.minDistance + escapeDistance) {
+                    //Si l'ennemis peut bouger & que le player est dans la zone
+                    if (currentTime > updatePathDelay) {
+                        currentTime = follow.Follow(player, nav, currentTime);
+                    }
+                } else {    //S'il n'ai pas à la bonne distance
+                    if (follow.isFollowingPlayer) {   // et que l'ennemis à un chemin à suivre
+                        follow.isFollowingPlayer = false;
+                        nav.Stop();
+                        print("Path cleared");
+                    }
+                }
+                if (follow.isOverlapping) {
+                    GetComponent<AimController>().enabled = true;
+                    GetComponent<AimController>().SetTarget(player.transform);
+                } else {
+                    GetComponent<AimController>().SetTarget(lastVisibleTarget);
+                    GetComponent<AimController>().enabled = false;
                 }
             }
-		    else{	//S'il n'ai pas à la bonne distance
-			    if(follow.isFollowingPlayer){   // et que l'ennemis à un chemin à suivre
-                    follow.isFollowingPlayer = false;
-                    nav.Stop();
-                    print("Path cleared");
-			    }
-		    }
 
-            if (follow.isOverlapping)
-            {
-                GetComponent<AimController>().enabled = true;
-                GetComponent<AimController>().SetTarget(player.transform);
-            }
-            else
-            {
-                GetComponent<AimController>().SetTarget(lastVisibleTarget);
-                GetComponent<AimController>().enabled = false;
-            }
         }
         SpriteOrientation();
     }
@@ -123,43 +121,42 @@ public class EnnemyManager : Pawn {
         if (escape.isEscaping){
             escape.Escape(player, nav);
 
-            if (follow.isOverlapping)
-            {
-                visibleTargets = fow.FindVisibleTargets();
-                if (visibleTargets != null)
-                {
-                    if (hasWeapon)
-                    {
-                        GetComponent<WeaponController>().TryShot(true);
-                    } 
-                    else
-                    {
-                        GetComponent<Animator>().SetBool("isAttacking", true);
-                        isAttacking = true;
-                        StartCoroutine(WaitUnitAttack());
-                    }
-                    lastVisibleTarget = visibleTargets;
-                }
-                else
-                {
-                    GetComponent<Animator>().SetBool("isAttacking", false);
-                    isAttacking = false;
-                    if (lastVisibleTarget != null)
-                    {
-                        nav.SetDestination(lastVisibleTarget.position);
+            if(follow != null) {
+                if (follow.isOverlapping) {
+                    visibleTargets = fow.FindVisibleTargets();
+                    if (visibleTargets != null) {
+                        if (hasWeapon) {
+                            GetComponent<WeaponController>().TryShot(true);
+                        } else if(!isAttacking){
+                            GetComponent<Animator>().SetBool("isAttacking", true);
+                            isAttacking = true;
+                            StartCoroutine(WaitUnitAttack());
+                        }
+                        lastVisibleTarget = visibleTargets;
+                    } else {
+                        GetComponent<Animator>().SetBool("isAttacking", false);
+                        isAttacking = false;
+                        if (lastVisibleTarget != null) {
+                            nav.SetDestination(lastVisibleTarget.position);
+                        }
                     }
                 }
             }
         }
 	}
 
+    //Triggered from animation event
     public void AnimAttack()
     {
         Transform Target = fow.FindVisibleTargets();
-        if (Target != null)
-        {
+        if (Target != null) {
             player.GetComponent<Player>().ApplyDamages(GetComponent<WeaponController>().m_projectileInfos.damages);
         }
+    }
+
+    //Triggered from animation event
+    public void SoundAttack() {
+        GetComponent<AudioSource>().PlayOneShot(atkSounds[Random.Range(0, atkSounds.Length - 1)]);
     }
 
     IEnumerator WaitUnitAttack()
@@ -170,11 +167,23 @@ public class EnnemyManager : Pawn {
 
     public override void ApplyDamages(float damages)
     {
-        base.ApplyDamages(damages);
+        health -= damages;
+
+        health = Mathf.Clamp(health, 0f, maxHealth);
+
+        healthBar.health = health / maxHealth;
+
+        if(!GetComponent<AudioSource>().isPlaying)
+            this.GetComponent<AudioSource>().PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length - 1)]);
+        if (GetComponent<Animation>())
+            GetComponent<Animation>().Play("Hit");
         if (health <= 0f){
             follow = null;
             nav.Stop();
-            gameObject.GetComponent<Animator>().SetTrigger("isDead");
+            GetComponent<Animator>().SetTrigger("isDead");
+            healthBar.gameObject.SetActive(false);
+            GetComponent<AudioSource>().PlayOneShot(deathSounds[Random.Range(0, deathSounds.Length - 1)]);
+            Invoke("DestroyPawn", 1f);
         }
     }
 }

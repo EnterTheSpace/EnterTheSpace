@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ParryController : MonoBehaviour 
 {
+    public AudioClip[] parrySounds;
 	[SerializeField] private float mFlt_duration;
 	[SerializeField] private float mFlt_cooldDown;
 	[SerializeField] private GameObject mRef_parry;
@@ -31,6 +32,7 @@ public class ParryController : MonoBehaviour
 	{
 		if(mFlt_cdTime <= 0f)
 		{
+            GetComponent<AudioSource>().PlayOneShot(parrySounds[Random.Range(0, parrySounds.Length - 1)]);
 			mFlt_cdTime = mFlt_cooldDown;
 			mRef_parry.SetActive(true);
 			mRef_parry.GetComponent<Animator>().speed = 1/mFlt_duration;

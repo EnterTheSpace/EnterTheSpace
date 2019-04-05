@@ -8,6 +8,8 @@ using PolyNav;
 [RequireComponent(typeof(FieldOfView), typeof(Following), typeof(Escaping))]
 public class Boss2 : Pawn {
 
+    public AudioClip[] jmpSound;
+    public AudioClip[] landSpound;
     //SerializeFields
     [Header("Object"), LabelOverride("Player reference"), SerializeField]
     [Tooltip("Object to follow.")]
@@ -21,7 +23,6 @@ public class Boss2 : Pawn {
     public float timeBeforeAttackAgain = 10f;
     public SpriteRenderer spriteRender;
     public float damage = 40;
-
 
     //Privates
     private PolyNavAgent nav;
@@ -143,14 +144,17 @@ public class Boss2 : Pawn {
                     lastVisibleTarget = visibleTargets;
                     if (currentTimeAttack > timeBeforeAttackAgain)
                     {
-                        spriteRender.GetComponent<Animator>().SetTrigger("atkJump");
-                        spriteRender.GetComponent<Animator>().ResetTrigger("fallHitGround");
-                        GetComponent<CircleCollider2D>().enabled = true;
-                        spriteRender.GetComponent<CircleCollider2D>().enabled = false;
-                        isAttacking = true;
-                        currentTimeAttack = 0;
-                        takedDamage = false;
-                        StartCoroutine(WaitFalling());
+                        if (!isAttacking) {
+                            spriteRender.GetComponent<Animator>().SetTrigger("atkJump");
+                            Invoke("JumpSound", spriteRender.GetComponent<Animator>().speed * 1.5f);
+                            spriteRender.GetComponent<Animator>().ResetTrigger("fallHitGround");
+                            GetComponent<CircleCollider2D>().enabled = true;
+                            spriteRender.GetComponent<CircleCollider2D>().enabled = false;
+                            isAttacking = true;
+                            currentTimeAttack = 0;
+                            takedDamage = false;
+                            StartCoroutine(WaitFalling());
+                        }
                     }
                 }
                 else
@@ -164,15 +168,24 @@ public class Boss2 : Pawn {
         }
     }
 
-    public override void ApplyDamages(float damages)
-    {
-        base.ApplyDamages(damages);
+    public override void ApplyDamages(float damages) {
+        if (Random.Range(0, 3) == 2)
+            this.GetComponent<AudioSource>().PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length - 1)], .5f);
+        health -= damages;
+
+        health = Mathf.Clamp(health, 0f, maxHealth);
+
+        healthBar.health = health / maxHealth;
         if (health <= 0f)
         {
             follow = null;
             nav.Stop();
             gameObject.GetComponent<Animator>().SetTrigger("isDead");
         }
+    }
+
+    public void JumpSound() {
+        GetComponent<AudioSource>().PlayOneShot(jmpSound[Random.Range(0, jmpSound.Length - 1)]);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

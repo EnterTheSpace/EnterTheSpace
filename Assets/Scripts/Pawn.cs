@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class Pawn : MonoBehaviour 
 {
+    public AudioClip[] deathSounds;
+    public AudioClip[] hitSounds;
     [SerializeField] protected float health = 100;
     public float Health
     {
@@ -19,8 +21,8 @@ public class Pawn : MonoBehaviour
         maxHealth = health;
     }
 
-    public virtual void ApplyDamages(float damages)
-    {
+    public virtual void ApplyDamages(float damages) {
+        this.GetComponent<AudioSource>().PlayOneShot(hitSounds[Random.Range(0, hitSounds.Length - 1)]);
         health -= damages;
 
         health = Mathf.Clamp(health, 0f, maxHealth);

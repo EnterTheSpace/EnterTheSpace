@@ -14,6 +14,7 @@ public class DashController : MonoBehaviour
 	private float mFlt_dashTime;
 	private float mFlt_cdTime;
 	private Vector3 mV_direction;
+    public AudioClip[] sounds;
 		//REFERENCES
 	private Rigidbody2D mRef_rigidBody;
 
@@ -44,6 +45,9 @@ public class DashController : MonoBehaviour
 	{
 		if(CanDash())
 		{
+            if(this.GetComponent<AudioSource>() != null) {
+                this.GetComponent<AudioSource>().PlayOneShot(sounds[Random.Range(0, sounds.Length - 1)]);
+            }
 			mV_direction = direction.normalized;
 			mFlt_cdTime = mFlt_coolDown;
 			mFlt_dashTime = mFlt_range/mFlt_speed;
