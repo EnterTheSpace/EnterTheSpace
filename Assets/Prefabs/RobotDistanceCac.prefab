@@ -67,6 +67,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3951424283081964949, guid: e3424e71457f4fe47b7c2413df0b732a,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3951424283081964949, guid: e3424e71457f4fe47b7c2413df0b732a,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3951424283081964940, guid: e3424e71457f4fe47b7c2413df0b732a,
         type: 3}
       propertyPath: atkSounds.Array.size
@@ -112,6 +122,17 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3951424283081964948, guid: e3424e71457f4fe47b7c2413df0b732a,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 7b01bb236210cc5489ff94b9cf5712ee,
+        type: 3}
+    - target: {fileID: 3951424283081964939, guid: e3424e71457f4fe47b7c2413df0b732a,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: be52e57422c10be448f2577924b2ed3b, type: 2}
     - target: {fileID: 3951424283081964930, guid: e3424e71457f4fe47b7c2413df0b732a,
         type: 3}
       propertyPath: aimingTrans

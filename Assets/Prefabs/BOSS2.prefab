@@ -120,6 +120,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 88e767b08f577a448a9b624a378eede8, type: 3}
   - {fileID: 8300000, guid: d95aa14e1245e1249996bd752238c793, type: 3}
   - {fileID: 8300000, guid: 88cac789f52af8b4a88e964083699f74, type: 3}
+  landParticles:
+  - {fileID: 4868637599959366333, guid: d365765dee2cb5945b8a1dca13d25fca, type: 3}
 --- !u!58 &1616105332
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -464,7 +466,7 @@ MonoBehaviour:
   healthBar: {fileID: 0}
   jmpSound:
   - {fileID: 8300000, guid: 290abeff377649b488b49db2152d0be1, type: 3}
-  landSpound: []
+  jmpParticles: {fileID: 115965783, guid: adcf7184c1d02f34fa473c5bd38511df, type: 3}
   player: {fileID: 0}
   hasCollision: 1
   updatePathDelay: 0.3

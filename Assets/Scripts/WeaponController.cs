@@ -20,6 +20,7 @@ public class WeaponController : MonoBehaviour {
     [Tooltip("Owner gameobject reference"), SerializeField] private GameObject m_ownerRef;
     private List<Projectile> mL_firedBullets;
     public ProjectileInfos m_projectileInfos;
+    public GameObject[] blastParticles;
     public AudioClip[] sounds;
 
 	// Use this for initialization
@@ -62,6 +63,14 @@ public class WeaponController : MonoBehaviour {
     {
         if(this.GetComponent<AudioSource>() != null)
             this.GetComponent<AudioSource>().PlayOneShot(sounds[Random.Range(0, sounds.Length - 1)]);
+
+        if (blastParticles != null) {
+            GameObject temp = Instantiate(blastParticles[Random.Range(0, blastParticles.Length - 1)], m_barrelRef);
+
+            temp.transform.localPosition += new Vector3(.1f, 0f);
+            temp.transform.localScale = new Vector3(3f, 3f);
+            Destroy(temp, 1f);
+        }
             //audioPlayer.TryPlayInRndSource(new List<AudioSource>(GetComponents<AudioSource>()), sounds[0]);
         coolDown = 1/fireRate;
         

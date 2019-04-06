@@ -51,7 +51,7 @@ public class EnnemyManager : Pawn {
 	
 	// Update is called once per frame
 	void Update () {
-        if(nav.velocity.x != 0)
+        if(nav.velocity.x != 0 || nav.velocity.y != 0f)
             GetComponent<Animator>().SetBool("isMoving", true);
         else
             GetComponent<Animator>().SetBool("isMoving", false);
@@ -92,27 +92,44 @@ public class EnnemyManager : Pawn {
         SpriteOrientation();
     }
 
-    void SpriteOrientation()
-    {
+    void SpriteOrientation() {
+        AimController aim = GetComponent<AimController>();
+        WeaponController weap = GetComponent<WeaponController>();
         Vector3 diff = GetComponent<AimController>().GetTargetDirection();
-        if (diff.x < 0f)//Player aiming left
-        {
-            if (!GetComponent<WeaponController>().m_weaponSprite.GetComponent<SpriteRenderer>().flipY)
-            {
-                GetComponent<WeaponController>().m_weaponSprite.GetComponent<SpriteRenderer>().flipY = true;
-                GetComponent<WeaponController>().BarrelRef().localPosition -= new Vector3(0f, 0.06f, 0f);
-            }
-            this.GetComponent<SpriteRenderer>().flipX = false;//Flip the character body sprite
-        }
-        else if (diff.x > 0f)//Player aiming right
-        {
-            if (GetComponent<WeaponController>().m_weaponSprite.GetComponent<SpriteRenderer>().flipY)
-            {
-                GetComponent<WeaponController>().m_weaponSprite.GetComponent<SpriteRenderer>().flipY = false;
-                GetComponent<WeaponController>().BarrelRef().localPosition += new Vector3(0f, 0.06f, 0f);
 
+        if (diff.x < 0f)// aiming left
+        {
+            this.GetComponent<SpriteRenderer>().flipX = false;//Flip the character body sprite
+            if (aim.aimingTrans.localScale.x == -1f)
+                aim.aimingTrans.localScale = new Vector3(1f, 1f, 1f);
+            
+            if (weap.m_weaponSprite.GetComponent<SpriteRenderer>().flipX) {
+                weap.m_weaponSprite.GetComponent<SpriteRenderer>().flipX = false;
+                weap.m_weaponSprite.GetComponent<SpriteRenderer>().flipY = true;
+                weap.BarrelRef().transform.localPosition = new Vector3(weap.BarrelRef().transform.localPosition.x * (-1f), -0.01f);
             }
-            this.GetComponent<SpriteRenderer>().flipX = true;//Restore the character body and the gun sprites orientation
+            if (nav.velocity.x != 0f || nav.velocity.y != 0f) {//If walking
+                aim.aimingTrans.localPosition = new Vector3(-0.217f, 0.11f, 0f);
+            } else {
+                aim.aimingTrans.localPosition = new Vector3(0.125f, 0.204f, 0f);
+            }
+        }
+        else if (diff.x > 0f)// aiming right
+        {
+            this.GetComponent<SpriteRenderer>().flipX = true;
+            if (aim.aimingTrans.localScale.x == 1f)
+                aim.aimingTrans.localScale = new Vector3(-1f, 1f, 1f);
+            
+            if (!weap.m_weaponSprite.GetComponent<SpriteRenderer>().flipX) {
+                weap.m_weaponSprite.GetComponent<SpriteRenderer>().flipX = true;
+                weap.m_weaponSprite.GetComponent<SpriteRenderer>().flipY = false;
+                weap.BarrelRef().transform.localPosition = new Vector3(weap.BarrelRef().transform.localPosition.x * (-1f), -0.01f);
+            }
+            if (nav.velocity.x != 0f || nav.velocity.y != 0f) {//If walking
+                aim.aimingTrans.localPosition = new Vector3(0.22f, 0.109f, 0f);
+            } else {
+                aim.aimingTrans.localPosition = new Vector3(-0.108f, 0.183f, 0f);
+            }
         }
     }
 
@@ -143,7 +160,7 @@ public class EnnemyManager : Pawn {
                 }
             }
         }
-	}
+    }
 
     //Triggered from animation event
     public void AnimAttack()
@@ -182,6 +199,9 @@ public class EnnemyManager : Pawn {
             nav.Stop();
             GetComponent<Animator>().SetTrigger("isDead");
             healthBar.gameObject.SetActive(false);
+            if (GetComponent<AimController>() != null)
+                GetComponent<AimController>().aimingTrans.gameObject.SetActive(false);
+            GetComponent<Collider2D>().enabled = false;
             GetComponent<AudioSource>().PlayOneShot(deathSounds[Random.Range(0, deathSounds.Length - 1)]);
             Invoke("DestroyPawn", 1f);
         }

@@ -97,15 +97,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281909443418134}
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0.065, y: -0.08, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.068, y: -0.042, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4458329283802828}
   - {fileID: 4411766783273280}
   m_Father: {fileID: 4134261270295418}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1307432784981462
 GameObject:
   m_ObjectHideFlags: 0
@@ -340,7 +340,7 @@ Transform:
   m_GameObject: {fileID: 1631440817014224}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 5.12, y: -5.19, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4335375209561124}
   - {fileID: 224376109361263172}
@@ -545,11 +545,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   singleShot: 0
-  fireRate: 3
-  projPerShot: 5
+  fireRate: 2
+  projPerShot: 1
   spawnRadius: 0
-  dispersion: 52
-  distance: 4.48
+  dispersion: 0
+  distance: 10
   m_bulletPrefab: {fileID: 1675908551714304, guid: f7ff466302942154f95c876a30515b78,
     type: 3}
   m_weaponSprite: {fileID: 1328758954049636}
@@ -563,6 +563,8 @@ MonoBehaviour:
     destroyer: 3
     bounce: 0
     scaleForce: 0
+  blastParticles:
+  - {fileID: 5877319968131064561, guid: 80c7ad194e1bca54b98ffa06e66aaed3, type: 3}
   sounds:
   - {fileID: 8300000, guid: c43d8f1c64875bd4da289e6a8d359aa1, type: 3}
   - {fileID: 8300000, guid: 3dfbcd44c75efae46a380a4b5889602e, type: 3}
@@ -592,6 +594,7 @@ MonoBehaviour:
   healthBar: {fileID: 114788969178089164}
   speed: 2
   input: 1
+  vulnerable: 0
   arm: {fileID: 4335375209561124}
   isInShop: 0
 --- !u!111 &651919362725174117

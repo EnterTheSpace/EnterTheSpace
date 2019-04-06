@@ -9,7 +9,7 @@ using PolyNav;
 public class Boss2 : Pawn {
 
     public AudioClip[] jmpSound;
-    public AudioClip[] landSpound;
+    public GameObject jmpParticles;
     //SerializeFields
     [Header("Object"), LabelOverride("Player reference"), SerializeField]
     [Tooltip("Object to follow.")]
@@ -186,6 +186,11 @@ public class Boss2 : Pawn {
 
     public void JumpSound() {
         GetComponent<AudioSource>().PlayOneShot(jmpSound[Random.Range(0, jmpSound.Length - 1)]);
+        if (jmpParticles != null) {
+            GameObject temp = Instantiate(jmpParticles, transform.GetChild(0).position + new Vector3(0f, 0.3f), Quaternion.identity, null);
+
+            Destroy(temp, 1f);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
