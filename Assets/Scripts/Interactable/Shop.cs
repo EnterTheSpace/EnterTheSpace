@@ -37,7 +37,9 @@ public class Shop : Interactable {
         if (beingUsed) {
             buy = true;
         } else {
-            base.Interact();
+            if (!beingUsed) {
+                beingUsed = true;
+            }
             canvasRef.gameObject.SetActive(true);
         }
     }
@@ -47,8 +49,6 @@ public class Shop : Interactable {
             base.Release();
             itemIndex = 0;
             canvasRef.gameObject.SetActive(false);
-        } else {
-
         }
     }
 

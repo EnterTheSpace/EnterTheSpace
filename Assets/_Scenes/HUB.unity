@@ -1074,6 +1074,17 @@ PrefabInstance:
       propertyPath: m_Looping
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5794918948551096787, guid: 3a87de489aed64543a8b1a225294523a,
+        type: 3}
+      propertyPath: m_RenderMode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5794918948551096787, guid: 3a87de489aed64543a8b1a225294523a,
+        type: 3}
+      propertyPath: m_VideoClip
+      value: 
+      objectReference: {fileID: 32900000, guid: 828bdb5d7f933f44ab91a4fac9fbe7a9,
+        type: 3}
     - target: {fileID: 4479897312086775890, guid: 3a87de489aed64543a8b1a225294523a,
         type: 3}
       propertyPath: m_SortingLayerID
@@ -5137,6 +5148,12 @@ PrefabInstance:
       propertyPath: infos.desc
       value: Avoid getting damages from projectiles by parrying them.
       objectReference: {fileID: 0}
+    - target: {fileID: 1071349763838184877, guid: b40e4e1055e4d5147bf21c1fe9959d03,
+        type: 3}
+      propertyPath: infos.preview
+      value: 
+      objectReference: {fileID: 32900000, guid: 0d862be9fb2043744ad4f487bd768774,
+        type: 3}
     - target: {fileID: 1760608125186947660, guid: b40e4e1055e4d5147bf21c1fe9959d03,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5658,12 +5675,12 @@ PrefabInstance:
     - target: {fileID: 114783522854054808, guid: 44f947f72fbb9de4cbe2a9fe1357d92d,
         type: 3}
       propertyPath: mFlt_range
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 114783522854054808, guid: 44f947f72fbb9de4cbe2a9fe1357d92d,
         type: 3}
       propertyPath: mFlt_coolDown
-      value: 2
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 114030520720095518, guid: 44f947f72fbb9de4cbe2a9fe1357d92d,
         type: 3}
@@ -5673,24 +5690,18 @@ PrefabInstance:
     - target: {fileID: 114030520720095518, guid: 44f947f72fbb9de4cbe2a9fe1357d92d,
         type: 3}
       propertyPath: projPerShot
-      value: 10
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114030520720095518, guid: 44f947f72fbb9de4cbe2a9fe1357d92d,
         type: 3}
       propertyPath: dispersion
-      value: 52
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 114030520720095518, guid: 44f947f72fbb9de4cbe2a9fe1357d92d,
         type: 3}
       propertyPath: distance
       value: 10
       objectReference: {fileID: 0}
-    - target: {fileID: 114030520720095518, guid: 44f947f72fbb9de4cbe2a9fe1357d92d,
-        type: 3}
-      propertyPath: m_bulletPrefab
-      value: 
-      objectReference: {fileID: 1675908551714304, guid: 8ff270cdabcc7c14cb790e4971837939,
-        type: 3}
     - target: {fileID: 114030520720095518, guid: 44f947f72fbb9de4cbe2a9fe1357d92d,
         type: 3}
       propertyPath: m_weaponSprite
@@ -5741,6 +5752,12 @@ PrefabInstance:
       propertyPath: arm
       value: 
       objectReference: {fileID: 947570828}
+    - target: {fileID: 212731242594433932, guid: 44f947f72fbb9de4cbe2a9fe1357d92d,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9d24db7d6b758654a8198bc1b7efbcca,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 44f947f72fbb9de4cbe2a9fe1357d92d, type: 3}
 --- !u!4 &947570826 stripped
@@ -7350,6 +7367,12 @@ PrefabInstance:
       propertyPath: infos.desc
       value: Add an automatic dash after the first is performed.
       objectReference: {fileID: 0}
+    - target: {fileID: 1071349763838184877, guid: b40e4e1055e4d5147bf21c1fe9959d03,
+        type: 3}
+      propertyPath: infos.preview
+      value: 
+      objectReference: {fileID: 32900000, guid: fb954c23ac731ff408100c72af64f141,
+        type: 3}
     - target: {fileID: 1760608125186947660, guid: b40e4e1055e4d5147bf21c1fe9959d03,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10072,6 +10095,12 @@ PrefabInstance:
       propertyPath: infos.desc
       value: Get a second life.
       objectReference: {fileID: 0}
+    - target: {fileID: 1071349763838184877, guid: b40e4e1055e4d5147bf21c1fe9959d03,
+        type: 3}
+      propertyPath: infos.preview
+      value: 
+      objectReference: {fileID: 32900000, guid: 828bdb5d7f933f44ab91a4fac9fbe7a9,
+        type: 3}
     - target: {fileID: 1760608125186947660, guid: b40e4e1055e4d5147bf21c1fe9959d03,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10606,7 +10635,7 @@ PrefabInstance:
     - target: {fileID: 1071349763838184877, guid: b40e4e1055e4d5147bf21c1fe9959d03,
         type: 3}
       propertyPath: infos.title
-      value: New weap
+      value: Laser Gun
       objectReference: {fileID: 0}
     - target: {fileID: 1071349763838184877, guid: b40e4e1055e4d5147bf21c1fe9959d03,
         type: 3}
@@ -10616,8 +10645,14 @@ PrefabInstance:
     - target: {fileID: 1071349763838184877, guid: b40e4e1055e4d5147bf21c1fe9959d03,
         type: 3}
       propertyPath: infos.desc
-      value: Get a new weapon
+      value: Fire more bullets !
       objectReference: {fileID: 0}
+    - target: {fileID: 1071349763838184877, guid: b40e4e1055e4d5147bf21c1fe9959d03,
+        type: 3}
+      propertyPath: infos.preview
+      value: 
+      objectReference: {fileID: 32900000, guid: cdafdc6ba92d5dc41a256ec7fb98be97,
+        type: 3}
     - target: {fileID: 1760608125186947660, guid: b40e4e1055e4d5147bf21c1fe9959d03,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10904,6 +10939,12 @@ PrefabInstance:
       propertyPath: infos.desc
       value: Make your dash longer.
       objectReference: {fileID: 0}
+    - target: {fileID: 1071349763838184877, guid: b40e4e1055e4d5147bf21c1fe9959d03,
+        type: 3}
+      propertyPath: infos.preview
+      value: 
+      objectReference: {fileID: 32900000, guid: ca1d2472624312943a4737c4a00f61ca,
+        type: 3}
     - target: {fileID: 1760608125186947660, guid: b40e4e1055e4d5147bf21c1fe9959d03,
         type: 3}
       propertyPath: m_LocalPosition.x

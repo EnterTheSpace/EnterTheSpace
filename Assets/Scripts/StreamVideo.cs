@@ -8,8 +8,17 @@ public class StreamVideo : MonoBehaviour {
     public VideoPlayer videoPlayer;
     // Use this for initialization
     void Start() {
+        Keep();
+    }
+
+    public void Pause() {
+        StopCoroutine(PlayVideo());
+    }
+
+    public void Keep() {
         StartCoroutine(PlayVideo());
     }
+
     IEnumerator PlayVideo() {
         videoPlayer.Prepare();
         WaitForSeconds waitForSeconds = new WaitForSeconds(1);

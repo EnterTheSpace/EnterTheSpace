@@ -20,6 +20,13 @@ public class InventoryController : MonoBehaviour
                 //Check existence
                 if (!ItemPossessed(temp.items[temp.itemIndex].infos)) {
                     if (money >= temp.items[temp.itemIndex].infos.Price) {
+                        if (temp.items[temp.itemIndex].infos.Title == "Long Dash") {
+                            Persistent.dashLength = 4f;
+                            Persistent.items.Add(temp.items[temp.itemIndex].infos.Thumbnail);
+                        }
+                        if (temp.items[temp.itemIndex].infos.Title == "Laser Gun") {
+                            Persistent.weapInfos = "Laser Gun";
+                        }
                         money -= temp.items[temp.itemIndex].infos.Price;
                         items.Add(temp.items[temp.itemIndex].infos);
                     }
@@ -31,6 +38,14 @@ public class InventoryController : MonoBehaviour
     public bool ItemPossessed(PurchasableSpecInfos item) {
         for (int i = 0; i < items.Count; i++) {
             if (items[i] == item)
+                return true;
+        }
+        return false;
+    }
+
+    public bool ItemPossessed(string name) {
+        for (int i = 0; i < items.Count; i++) {
+            if (items[i].Title == name)
                 return true;
         }
         return false;

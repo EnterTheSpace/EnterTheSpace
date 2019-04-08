@@ -6,7 +6,7 @@ public class WeaponController : MonoBehaviour {
 
 	[Header("Properties")]
     [Tooltip("Wether the weapon is single shot or full auto"), SerializeField] private bool singleShot;
-    [Tooltip("Shot(s) per second"), SerializeField, Range(0f, 20f)] private float fireRate;
+    [Tooltip("Shot(s) per second"), SerializeField, Range(0f, 20f)] public float fireRate;
     [SerializeField] public uint projPerShot;
     [SerializeField] private float spawnRadius;
     [SerializeField, Range(0f, 360f)] public float dispersion = 0;

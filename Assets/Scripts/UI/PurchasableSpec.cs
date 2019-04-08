@@ -36,6 +36,8 @@ public class PurchasableSpec : MonoBehaviour {
         thumbnail.sprite = infos.Thumbnail;
         price.text = infos.Price.ToString();
         desc.text = infos.Desc;
+        preview.GetComponent<StreamVideo>().Pause();
         preview.clip = infos.Preview;
+        preview.GetComponent<StreamVideo>().Keep();
     }
 }

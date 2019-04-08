@@ -8,7 +8,7 @@ public class DashController : MonoBehaviour
 {
 		//PROPERTIES
 	[SerializeField] private float mFlt_speed;
-	[SerializeField] private float mFlt_range;
+	[SerializeField] public float mFlt_range;
 	[SerializeField] private float mFlt_coolDown;
     public float cd { get { return mFlt_coolDown; } private set { mFlt_coolDown = value; } }
 	private float mFlt_dashTime;

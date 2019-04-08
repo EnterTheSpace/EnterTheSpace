@@ -598,6 +598,9 @@ MonoBehaviour:
   speed: 2
   input: 1
   vulnerable: 0
+  guns:
+  - {fileID: 21300000, guid: 9d24db7d6b758654a8198bc1b7efbcca, type: 3}
+  - {fileID: 21300000, guid: 072e10cd71bb9b045ae7abeccbe19492, type: 3}
   arm: {fileID: 4335375209561124}
   isInShop: 0
 --- !u!111 &651919362725174117

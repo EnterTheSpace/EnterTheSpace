@@ -7,13 +7,6 @@ using UnityEngine.SceneManagement;
  using UnityEditor;
  #endif
 
-[System.Serializable]
- public struct Permission
- {
-	 public bool canMove;
-	 public bool canDash;
-	 public bool canInteract;
- }
 
 [System.Serializable]
  public enum State
@@ -33,13 +26,12 @@ public class Player : Pawn
 	[Header("Properties")]
 	[Tooltip("Player speed"), SerializeField] private float speed;
 	[SerializeField] private ENUM_Input input;
-	[SerializeField] Dictionary<State, Permission> Abilities;
 
 	private bool shootReset;
     [HideInInspector]public bool vulnerable;
 
     private Cooldown dash;
-
+    public Sprite[] guns;
 	//References
 	[Header("References")]
 	[Tooltip("Aiming transform reference"), SerializeField] private Transform arm;
@@ -61,6 +53,8 @@ public class Player : Pawn
 	protected override void Initialization()
 	{
 		base.Initialization();
+
+
 
 		if(Input.GetJoystickNames().Length > 0)
 			input = ENUM_Input.Joystick;
@@ -85,6 +79,29 @@ public class Player : Pawn
 
         dash = new Cooldown();
         dash.SetNew(dashController.GetDashRange()/dashController.GetDashSpeed());
+        
+        if (Persistent.weapInfos != null) {
+            //weaponRef.m_projectileInfos = Persistent.weapInfos.projInfos;
+            if(Persistent.weapInfos == "Laser Gun") {
+                weaponRef.projPerShot = 3;
+                weaponRef.dispersion = 35f;
+                weaponRef.m_weaponSprite.GetComponent<SpriteRenderer>().sprite = guns[1];
+            }
+            /*weaponRef.projPerShot = Persistent.weapInfos.projetPerShot;
+            weaponRef.dispersion = Persistent.weapInfos.dispersion;
+            weaponRef.fireRate = Persistent.weapInfos.fireRate;
+            */
+        }
+        if (Persistent.dashLength != 0f) {
+            dashController.mFlt_range = Persistent.dashLength;
+        }
+        if (Persistent.items != null) {
+            foreach (Sprite spr in Persistent.items) {
+                PurchasableSpecInfos temp = new PurchasableSpecInfos();
+                temp.Thumbnail = spr;
+                GetComponent<InventoryController>().items.Add(temp);
+            }
+        }
     }
 
 	public override void ApplyDamages(float damages)
@@ -115,7 +132,8 @@ public class Player : Pawn
 	}
 
     private void Overlap() {
-        if(this.GetComponent<Overlapper>().GetFirstObject<Shop>() != null && this.GetComponent<Overlapper>().GetFirstObject<Shop>().BeingUsed) {
+        if(this.GetComponent<Overlapper>().GetFirstObject<Shop>() != null &&
+            this.GetComponent<Overlapper>().GetFirstObject<Shop>().BeingUsed) {
             isInShop = true;
         } else {
             isInShop = false;
