@@ -19,6 +19,8 @@ public class Interactable : MonoBehaviour
 	public bool Switchable{get{return switchable;} set{switchable = value;}}
 	[SerializeField] protected bool singleUse;
 	public bool SingleUse{get{return singleUse;} set{singleUse = value;}}
+	[SerializeField] protected bool destroyAfter;
+	public bool DestroyAfter { get{return destroyAfter; } set{ destroyAfter = value;}}
 
 	//Properties
 	//State
@@ -53,6 +55,7 @@ public class Interactable : MonoBehaviour
 				Release();
 			*/
 		}
+        Release();
 		//TO DO : Add the hold functionality
 	}
 
@@ -61,10 +64,12 @@ public class Interactable : MonoBehaviour
 		if(beingUsed)
 		{
 			beingUsed = false;
+
 			if(singleUse)
-			{
 				Destroy(this);
-			}
+
+            if (destroyAfter)
+                Destroy(this.gameObject);
 		}
 	}
 
@@ -97,4 +102,10 @@ public class Interactable : MonoBehaviour
 			//TO DO : Unhighlight the object itself
 		}
 	}
+
+    private void OnTriggerEnter2D(Collider2D collision) {
+        if (!manualUse && collision.name == "Player") {
+            Interact();
+        }
+    }
 }

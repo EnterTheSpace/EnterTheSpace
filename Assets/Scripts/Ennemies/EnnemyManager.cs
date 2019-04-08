@@ -19,6 +19,9 @@ public class EnnemyManager : Pawn {
 	[Header("Path"),LabelOverride("Update delay"),SerializeField]
 	[Tooltip("Delay in second for updating the path.")]
 	private float updatePathDelay = 1f;
+    [Header("Drop"), LabelOverride("Item dropped"), SerializeField]
+    [Tooltip("Item dropped when the ennemy is dead.")]
+    private GameObject dropPrefab;
     [Header("Weapon"), LabelOverride("Has Weapon?"), SerializeField]
     private bool hasWeapon;
     public AudioClip[] atkSounds;
@@ -55,6 +58,7 @@ public class EnnemyManager : Pawn {
             GetComponent<Animator>().SetBool("isMoving", true);
         else
             GetComponent<Animator>().SetBool("isMoving", false);
+        
 
         if (follow != null && !isAttacking)
         { 
@@ -111,7 +115,7 @@ public class EnnemyManager : Pawn {
             if (nav.velocity.x != 0f || nav.velocity.y != 0f) {//If walking
                 aim.aimingTrans.localPosition = new Vector3(-0.217f, 0.11f, 0f);
             } else {
-                aim.aimingTrans.localPosition = new Vector3(0.125f, 0.204f, 0f);
+                aim.aimingTrans.localPosition = new Vector3(0.068f, 0.102f, 0f);
             }
         }
         else if (diff.x > 0f)// aiming right
@@ -128,7 +132,7 @@ public class EnnemyManager : Pawn {
             if (nav.velocity.x != 0f || nav.velocity.y != 0f) {//If walking
                 aim.aimingTrans.localPosition = new Vector3(0.22f, 0.109f, 0f);
             } else {
-                aim.aimingTrans.localPosition = new Vector3(-0.108f, 0.183f, 0f);
+                aim.aimingTrans.localPosition = new Vector3(-0.067f, 0.099f, 0f);
             }
         }
     }
@@ -203,7 +207,13 @@ public class EnnemyManager : Pawn {
                 GetComponent<AimController>().aimingTrans.gameObject.SetActive(false);
             GetComponent<Collider2D>().enabled = false;
             GetComponent<AudioSource>().PlayOneShot(deathSounds[Random.Range(0, deathSounds.Length - 1)]);
+            if (dropPrefab != null)
+                Instantiate(dropPrefab, transform.position, Quaternion.identity, null);
             Invoke("DestroyPawn", 1f);
         }
+    }
+
+    public override void DestroyPawn() {
+        base.DestroyPawn();
     }
 }

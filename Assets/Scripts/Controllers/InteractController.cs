@@ -60,7 +60,6 @@ public class InteractController : MonoBehaviour
 				inRangeObject = temp;
 				inRangeObject.Highlight(true, true);
 			}else{
-				print("No interactable found");
 				if(inRangeObject != null) {
 					print("Unhighlighting object");
 					inRangeObject.Unhighlight();

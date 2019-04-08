@@ -324,6 +324,9 @@ GameObject:
   - component: {fileID: 114904808913591162}
   - component: {fileID: 651919362725174117}
   - component: {fileID: 1963285929307409522}
+  - component: {fileID: 1763510828578825644}
+  - component: {fileID: 8415661335039116781}
+  - component: {fileID: 6562469083759557842}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -709,6 +712,48 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1763510828578825644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1631440817014224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8049c2aaf9f6df44bae6d7f2e498565, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overlapped: []
+--- !u!114 &8415661335039116781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1631440817014224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d3540557b4e8d7d488bf81d62ee4309b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown:
+    duration: 0.1
+--- !u!114 &6562469083759557842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1631440817014224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9738a11954a42f408f1e412ba677da9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interacter: {fileID: 8415661335039116781}
+  money: 20000
+  items: []
 --- !u!1 &1644236108415182
 GameObject:
   m_ObjectHideFlags: 0

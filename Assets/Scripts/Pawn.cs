@@ -32,7 +32,7 @@ public class Pawn : MonoBehaviour
             Destroy(this.gameObject);
     }
 
-    public void DestroyPawn()
+    public virtual void DestroyPawn()
     {
         Destroy(this.gameObject);
     }
